@@ -16,5 +16,6 @@ namespace HRProject
 
         public DbSet<Company> Companys { get; set; }
         public DbSet<JobPosition> JobPositions { get; set; }
+        public DbSet<SuperUser> SuperUsers { get; set; }
     }
 }
