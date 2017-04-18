@@ -15,7 +15,7 @@ namespace HRProject.Services
         {
             _context = context;
         }
-        public void AddPerson(Company company)
+        public void AddCompany(Company company)
         {
             _context.Companys.Add(company);
             _context.SaveChanges();
@@ -31,9 +31,9 @@ namespace HRProject.Services
             return _context.Companys.OrderBy(c => c.Name).ToList();
         }
 
-        public Company GetCompany(int id)
+        public Company GetCompany(int companyId)
         {
-            return _context.Companys.Where(c => c.CompanyId == id).FirstOrDefault();
+            return _context.Companys.Where(c => c.CompanyId == companyId).FirstOrDefault();
         }
 
         public Company GetCompany(int id, bool includeJob)
@@ -53,7 +53,7 @@ namespace HRProject.Services
             _context.SaveChanges();
         }
 
-        public void UpdatePerson(Company company)
+        public void UpdateCompany(Company company)
         {
             _context.Companys.Update(company);
             _context.SaveChanges();

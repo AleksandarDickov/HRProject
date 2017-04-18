@@ -7,8 +7,8 @@
 -debug:full
 -nostdlib
 -nologo
-"C:\Users\DOIT_DOTNET_USER1\documents\visual studio 2015\Projects\HRProject\src\HRProject\obj\Debug\netcoreapp1.0\dotnet-compile.assemblyinfo.cs"
--out:"C:\Users\DOIT_DOTNET_USER1\documents\visual studio 2015\Projects\HRProject\src\HRProject\bin\Debug\netcoreapp1.0\HRProject.dll"
+"C:\Users\DOIT_DOTNET_USER1\Source\Repos\HRProject\HRProject\src\HRProject\obj\Debug\netcoreapp1.0\dotnet-compile.assemblyinfo.cs"
+-out:"C:\Users\DOIT_DOTNET_USER1\Source\Repos\HRProject\HRProject\src\HRProject\bin\Debug\netcoreapp1.0\HRProject.dll"
 -r:"C:\Users\DOIT_DOTNET_USER1\.nuget\packages\Microsoft.ApplicationInsights\2.1.0\lib\dotnet5.4\Microsoft.ApplicationInsights.dll"
 -r:"C:\Users\DOIT_DOTNET_USER1\.nuget\packages\Microsoft.ApplicationInsights.AspNetCore\1.0.0\lib\netstandard1.6\Microsoft.ApplicationInsights.AspNetCore.dll"
 -r:"C:\Users\DOIT_DOTNET_USER1\.nuget\packages\Microsoft.AspNetCore.Antiforgery\1.0.1\lib\netstandard1.3\Microsoft.AspNetCore.Antiforgery.dll"
@@ -178,12 +178,14 @@
 -r:"C:\Users\DOIT_DOTNET_USER1\.nuget\packages\System.Threading.Timer\4.3.0\ref\netstandard1.2\System.Threading.Timer.dll"
 -r:"C:\Users\DOIT_DOTNET_USER1\.nuget\packages\System.Xml.ReaderWriter\4.3.0\ref\netstandard1.3\System.Xml.ReaderWriter.dll"
 -r:"C:\Users\DOIT_DOTNET_USER1\.nuget\packages\System.Xml.XDocument\4.3.0\ref\netstandard1.3\System.Xml.XDocument.dll"
--resource:"C:\Users\DOIT_DOTNET_USER1\documents\visual studio 2015\Projects\HRProject\src\HRProject\obj\Debug\netcoreapp1.0\HRProjectdotnet-compile.deps.json",HRProject.deps.json
-"C:\Users\DOIT_DOTNET_USER1\documents\visual studio 2015\Projects\HRProject\src\HRProject\HRContext.cs"
-"C:\Users\DOIT_DOTNET_USER1\documents\visual studio 2015\Projects\HRProject\src\HRProject\Program.cs"
-"C:\Users\DOIT_DOTNET_USER1\documents\visual studio 2015\Projects\HRProject\src\HRProject\Startup.cs"
-"C:\Users\DOIT_DOTNET_USER1\documents\visual studio 2015\Projects\HRProject\src\HRProject\Controllers\ValuesController.cs"
-"C:\Users\DOIT_DOTNET_USER1\documents\visual studio 2015\Projects\HRProject\src\HRProject\Models\Company.cs"
-"C:\Users\DOIT_DOTNET_USER1\documents\visual studio 2015\Projects\HRProject\src\HRProject\Models\JobPosition.cs"
-"C:\Users\DOIT_DOTNET_USER1\documents\visual studio 2015\Projects\HRProject\src\HRProject\Models\RegularUser.cs"
-"C:\Users\DOIT_DOTNET_USER1\documents\visual studio 2015\Projects\HRProject\src\HRProject\Models\SuperUser.cs"
+-resource:"C:\Users\DOIT_DOTNET_USER1\Source\Repos\HRProject\HRProject\src\HRProject\obj\Debug\netcoreapp1.0\HRProjectdotnet-compile.deps.json",HRProject.deps.json
+"C:\Users\DOIT_DOTNET_USER1\Source\Repos\HRProject\HRProject\src\HRProject\HRContext.cs"
+"C:\Users\DOIT_DOTNET_USER1\Source\Repos\HRProject\HRProject\src\HRProject\Program.cs"
+"C:\Users\DOIT_DOTNET_USER1\Source\Repos\HRProject\HRProject\src\HRProject\Startup.cs"
+"C:\Users\DOIT_DOTNET_USER1\Source\Repos\HRProject\HRProject\src\HRProject\Controllers\ValuesController.cs"
+"C:\Users\DOIT_DOTNET_USER1\Source\Repos\HRProject\HRProject\src\HRProject\Models\Company.cs"
+"C:\Users\DOIT_DOTNET_USER1\Source\Repos\HRProject\HRProject\src\HRProject\Models\JobPosition.cs"
+"C:\Users\DOIT_DOTNET_USER1\Source\Repos\HRProject\HRProject\src\HRProject\Models\RegularUser.cs"
+"C:\Users\DOIT_DOTNET_USER1\Source\Repos\HRProject\HRProject\src\HRProject\Models\SuperUser.cs"
+"C:\Users\DOIT_DOTNET_USER1\Source\Repos\HRProject\HRProject\src\HRProject\Services\CompanyRepository.cs"
+"C:\Users\DOIT_DOTNET_USER1\Source\Repos\HRProject\HRProject\src\HRProject\Services\ICompanyRepository.cs"
