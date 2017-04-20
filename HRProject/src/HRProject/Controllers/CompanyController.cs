@@ -119,6 +119,35 @@ namespace HRProject.Controllers
 
         }
 
+        [HttpGet("bonus")]
+        public IActionResult SearchAndSort([FromQuery]string searchString, [FromQuery] string sortBy, [FromQuery] int page, [FromQuery] int companiesPerPage = 3)
+        {
+            var company = from p in _ctx.Companys
+                         select p;
+
+            if (searchString != null)
+            {
+                company = company.Where(p => p.Name.Contains(searchString)
+                                        || p.City.Contains(searchString));
+            }
+
+            if (sortBy == "Descending")
+            {
+                company = company.OrderByDescending(p => p.Name);
+            }
+            else if (sortBy == "Ascending")
+            {
+                company = company.OrderBy(p => p.Name);
+            }
+
+            if (page > 0)
+            {
+                company = company.Skip((page - 1) * companiesPerPage).Take(companiesPerPage);
+            }
+
+            return Ok(company);
+        }
+
 
 
     }
