@@ -75,5 +75,36 @@ namespace HRProject.Controllers
             _userRepository.UpdateUser(newUser);
             return new NoContentResult();
         }
-    }
+
+        [HttpPost]
+        public IActionResult AddUser([FromBody] User user)
+        {
+            if (user == null)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                _userRepository.AddUser(user);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+
+            return Ok(" Sve je u redu");
+        }
+
+        [HttpDelete("userId")]
+        public IActionResult Delete(int userId)
+        {
+            var user = _userRepository.Find(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            _userRepository.Remove(userId);
+            return new NoContentResult();
+        }
+        }
 }
