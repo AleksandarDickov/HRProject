@@ -32,15 +32,6 @@ namespace HRProject.Services
             return _context.JobPositions.Where(c => c.JobId == jobId).FirstOrDefault();
         }
 
-        public JobPosition GetJob(int id, bool includeCompany)
-        {
-            if (includeCompany)
-            {
-                return _context.JobPositions.Include(c => c.Companies)
-                    .Where(c => c.JobId == id).FirstOrDefault();
-            }
-            return _context.JobPositions.Where(c => c.JobId == id).FirstOrDefault();
-        }
 
         public IEnumerable<JobPosition> GetJobs()
         {

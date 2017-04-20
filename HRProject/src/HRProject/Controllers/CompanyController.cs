@@ -8,13 +8,13 @@ using HRProject.Services;
 
 namespace HRProject.Controllers
 {
-    [Route("api")]
-    public class ValuesController : Controller
+    [Route("api/company")]
+    public class CompanyController : Controller
     {
         private ICompanyRepository _companyRepository;
         private HRContext _ctx;
 
-        public ValuesController(HRContext ctx)
+        public CompanyController(HRContext ctx)
         {
             _ctx = ctx;
             _companyRepository = new CompanyRepository(ctx); 
@@ -35,7 +35,7 @@ namespace HRProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddPerson([FromBody] Company company)
+        public IActionResult AddCompany([FromBody] Company company)
         {
             if (company == null)
             {
@@ -95,7 +95,7 @@ namespace HRProject.Controllers
         }
 
         [HttpGet("{companyId}")]
-        public IActionResult GetPerson(int companyId, bool includeJob = false)
+        public IActionResult GetCompany(int companyId, bool includeJob = false)
        {
             var company = _companyRepository.GetCompany(companyId, includeJob);
 
