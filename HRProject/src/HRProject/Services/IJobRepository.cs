@@ -9,8 +9,8 @@ namespace HRProject.Services
     interface IJobRepository
     {
         IEnumerable<JobPosition> GetJobs();
-        Company GetCompany(int jobId);
-        Company GetCompany(int id, bool includeCompany);
+        JobPosition GetJob(int jobId);
+        JobPosition GetJob(int id, bool includeCompany);
         void AddJob(JobPosition job);
         void UpdateJob(JobPosition job);
         JobPosition Find(int id);
