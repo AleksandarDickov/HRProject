@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HRProject.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace HRProject.Services
 {
@@ -35,10 +36,10 @@ namespace HRProject.Services
         {
             if (includeCompany)
             {
-                return _context.JobPositions.Include(c => c.)
-                    .Where(c => c.CompanyId == id).FirstOrDefault();
+                return _context.JobPositions.Include(c => c.Companies)
+                    .Where(c => c.JobId == id).FirstOrDefault();
             }
-            return _context.Companys.Where(c => c.CompanyId == id).FirstOrDefault();
+            return _context.JobPositions.Where(c => c.JobId == id).FirstOrDefault();
         }
 
         public IEnumerable<JobPosition> GetJobs()
@@ -48,12 +49,15 @@ namespace HRProject.Services
 
         public void Remove(int id)
         {
-            throw new NotImplementedException();
+            var entity = _context.JobPositions.First(t => t.JobId == id);
+            _context.JobPositions.Remove(entity);
+            _context.SaveChanges();
         }
 
         public void UpdateJob(JobPosition job)
         {
-            throw new NotImplementedException();
+            _context.JobPositions.Update(job);
+            _context.SaveChanges();
         }
     }
 }
