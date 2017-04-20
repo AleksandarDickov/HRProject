@@ -99,7 +99,35 @@ namespace HRProject.Controllers
             _jobRepository.GetJob(jobId);
 
             return Ok(job);
+        }
 
+        [HttpGet("bonus")]
+        public IActionResult SearchAndSort([FromQuery]string searchString, [FromQuery] string sortBy, [FromQuery] int page, [FromQuery] int jobsPerPage = 3)
+        {
+            var job = from p in _ctx.JobPositions
+                          select p;
+
+            if (searchString != null)
+            {
+                job = job.Where(p => p.Name.Contains(searchString)
+                                        || p.City.Contains(searchString));
+            }
+
+            if (sortBy == "Descending")
+            {
+                job = job.OrderByDescending(p => p.Name);
+            }
+            else if (sortBy == "Ascending")
+            {
+                job = job.OrderBy(p => p.Name);
+            }
+
+            if (page > 0)
+            {
+                job = job.Skip((page - 1) * jobsPerPage).Take(jobsPerPage);
+            }
+
+            return Ok(job);
         }
     }
 }

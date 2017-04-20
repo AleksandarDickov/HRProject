@@ -42,37 +42,37 @@ namespace HRProject.Controllers
 
             _userRepository.GetUser(userId);
 
-            return Ok(user);
-
+            return Ok(user);    
         }
-        [HttpPost]
-        public IActionResult AddUser([FromBody] User user)
+
+
+        [HttpPut("{userId}")]
+        public IActionResult UpdateUser(int userId, [FromBody] User updateUser)
         {
-            if (user == null)
+            if (updateUser == null || updateUser.UserId != userId)
             {
                 return BadRequest();
             }
-            try
-            {
-                _userRepository.AddUser(user);
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            } 
 
-                return Ok(" Sve je u redu");
-        }
-
-        [HttpDelete("userId")]
-        public IActionResult Delete(int userId)
-        {
-            var user = _userRepository.Find(userId);
-            if(user == null)
+            var newUser = _userRepository.GetUser(userId);
+            if (newUser == null)
             {
                 return NotFound();
             }
-            _userRepository.Remove(userId);
+
+            newUser.Name = updateUser.Name;
+            newUser.SurName = updateUser.SurName;
+            newUser.City = updateUser.City;
+            newUser.Country = updateUser.Country;
+            newUser.PartTime_FullTime = updateUser.PartTime_FullTime;
+            newUser.WorkExperience = updateUser.WorkExperience;
+            newUser.Status = updateUser.Status;
+            newUser.DateOfBirth = updateUser.DateOfBirth;
+            newUser.Sex = updateUser.Sex;
+            newUser.NoteField = updateUser.NoteField;
+            newUser.Keywords = updateUser.Keywords;
+
+            _userRepository.UpdateUser(newUser);
             return new NoContentResult();
         }
     }

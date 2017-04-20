@@ -22,7 +22,7 @@ namespace HRProject.Models
         public string Sex { get; set; }
         public string NoteField { get; set; }
         
-        public JobPosition Keywords { get; set; }
+        public ICollection<JobPosition> Keywords { get; set; }
 
         UserTipe user { get; set; }
     }
