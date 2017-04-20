@@ -18,5 +18,7 @@ namespace HRProject.Models
         public string Country { get; set; }
         public string PartTime_FullTime { get; set; }
         public string Keywords { get; set; }
+
+        public ICollection<Company> Companies { get; set; }
     }
 }

@@ -94,9 +94,9 @@ namespace HRProject.Controllers
             return new NoContentResult();
         }
 
-        [HttpGet("{JMBG}")]
+        [HttpGet("{companyId}")]
         public IActionResult GetPerson(int companyId, bool includeJob = false)
-        {
+       {
             var company = _companyRepository.GetCompany(companyId, includeJob);
 
             if (company == null)
