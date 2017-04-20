@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 namespace HRProject.Controllers
 {
 
-    public class SuperUserController : Controller
+    public class UserController : Controller
     {
         private HRContext _ctx;
-        public SuperUserController(HRContext ctx)
+        public UserController(HRContext ctx)
         {
             _ctx = ctx;
         }
