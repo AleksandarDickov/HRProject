@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace HRProject.Models
 {
-    public class User
+    public class User : IdentityUser
     {
-        [Key]
-        [Required]
-        public int UserId { get; set; }
+        //[Key]
+        //[Required]
+        //public int UserId { get; set; }
         public string Name { get; set; }
         public string SurName { get; set; }
         public string City { get; set; }
@@ -24,7 +25,7 @@ namespace HRProject.Models
         
         public ICollection<JobPosition> Keywords { get; set; }
 
-        UserTipe user { get; set; }
+        public UserTipe user { get; set; }
     }
 
     public enum UserTipe

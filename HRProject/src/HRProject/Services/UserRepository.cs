@@ -18,36 +18,36 @@ namespace HRProject.Services
 
         public void AddUser(User user)
         {
-            _context.Users.Add(user);
+            _context.RegUsers.Add(user);
             _context.SaveChanges();
 
         }
 
-        public User Find(int id)
+        public User Find(string name)
         {
-            return _context.Users.FirstOrDefault(t => t.UserId == id);
+            return _context.RegUsers.FirstOrDefault(t => t.Name == name);
         }
 
         public IEnumerable<User> GetUsers()
         {
-            return _context.Users.OrderBy(c => c.Name).ToList();
+            return _context.RegUsers.OrderBy(c => c.Name).ToList();
         }
 
-        public User GetUser(int userId)
+        public User GetUser(string name)
         {
-            return _context.Users.Where(c => c.UserId == userId).FirstOrDefault();
+            return _context.RegUsers.Where(c => c.Name == name).FirstOrDefault();
         }
 
-        public void Remove(int id)
+        public void Remove(string name)
         {
-            var entity = _context.Users.First(t => t.UserId == id);
-            _context.Users.Remove(entity);
+            var entity = _context.RegUsers.First(t => t.Name == name);
+            _context.RegUsers.Remove(entity);
             _context.SaveChanges();
         }
 
         public void UpdateUser(User user)
         {
-            _context.Users.Update(user);
+            _context.RegUsers.Update(user);
             _context.SaveChanges();
         }
     }

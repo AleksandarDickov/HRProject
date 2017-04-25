@@ -1,5 +1,6 @@
 ﻿using HRProject.Models;
 using HRProject.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace HRProject.Controllers
             _userRepository = new UserRepository(ctx);
         }
 
-
+        [Authorize(Roles = "SuperUser")]
         [HttpGet()]
         public IActionResult GetUsers()
         {
@@ -29,10 +30,11 @@ namespace HRProject.Controllers
             return Ok(userEntity);
         }
 
+      
         [HttpGet("{userId}")]
-        public IActionResult GetUser(int userId)
+        public IActionResult GetUser(string name)
         {
-            var user = _userRepository.GetUser(userId);
+            var user = _userRepository.GetUser(name);
 
 
             if (user == null)
@@ -40,21 +42,21 @@ namespace HRProject.Controllers
                 return NotFound();
             }
 
-            _userRepository.GetUser(userId);
+            _userRepository.GetUser(name);
 
             return Ok(user);    
         }
 
 
         [HttpPut("{userId}")]
-        public IActionResult UpdateUser(int userId, [FromBody] User updateUser)
+        public IActionResult UpdateUser(string userName, [FromBody] User updateUser)
         {
-            if (updateUser == null || updateUser.UserId != userId)
+            if (updateUser == null || updateUser.Name != userName)
             {
                 return BadRequest();
             }
 
-            var newUser = _userRepository.GetUser(userId);
+            var newUser = _userRepository.GetUser(userName);
             if (newUser == null)
             {
                 return NotFound();
@@ -96,14 +98,14 @@ namespace HRProject.Controllers
         }
 
         [HttpDelete("userId")]
-        public IActionResult Delete(int userId)
+        public IActionResult Delete(string name)
         {
-            var user = _userRepository.Find(userId);
+            var user = _userRepository.Find(name);
             if (user == null)
             {
                 return NotFound();
             }
-            _userRepository.Remove(userId);
+            _userRepository.Remove(name);
             return new NoContentResult();
         }
         }

@@ -4,10 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace HRProject
 {
-    public class HRContext : DbContext
+    public class HRContext : IdentityDbContext<IdentityUser>
     {
         public HRContext(DbContextOptions<HRContext> options) : base(options)
         {
@@ -16,6 +17,6 @@ namespace HRProject
 
         public DbSet<Company> Companys { get; set; }
         public DbSet<JobPosition> JobPositions { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> RegUsers { get; set; }
     }
 }
