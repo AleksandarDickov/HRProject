@@ -21,7 +21,7 @@ namespace HRProject.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("GetJob", "Job");
+                return RedirectToAction("GetJobs", "Job");
             }
 
             return View();
@@ -40,7 +40,7 @@ namespace HRProject.Controllers
                 {
                     if (string.IsNullOrWhiteSpace(returnUrl))
                     {
-                        return RedirectToAction("GetJob", "Job");
+                        return RedirectToAction("GetJobs", "Job");
                     }
                     else
                     {

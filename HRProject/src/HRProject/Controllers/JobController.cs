@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HRProject.Controllers
 {
-    [Route("api/job")]
+    [Route("[controller]")]
     public class JobController : Controller
     {
         private IJobRepository _jobRepository;
@@ -20,7 +20,7 @@ namespace HRProject.Controllers
             _jobRepository = new JobRepository(ctx);
         }
 
-        [HttpGet()]
+        [HttpGet("GetJobs")]
         public IActionResult GetJobs()
         {
             var jobEntity = _jobRepository.GetJobs();

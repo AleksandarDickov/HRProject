@@ -138,7 +138,7 @@ namespace HRProject
                 user.UserName = "Aca";
                 user.Email = "aca@gmail.com";
 
-                string userPWD = "Sifra123/";
+                string userPWD = "sifra";
 
                 var chkUser = await userManager.CreateAsync(user, userPWD);
 
@@ -166,7 +166,7 @@ namespace HRProject
                 role.Name = "RegUser";
                 await roleManager.CreateAsync(role);
             }
-        }
 
         }
+    }
 }
