@@ -156,14 +156,28 @@ namespace HRProject
                 var role = new IdentityRole();
                 role.Name = "HrManager";
                 await roleManager.CreateAsync(role);
+
+                var user = new IdentityUser();
+                user.UserName = "Jela";
+                user.Email = "jela@gmail.com";
+
+                string userPWD = "sifra123";
+
+                var chkUser = await userManager.CreateAsync(user, userPWD);
+
+                //Add default User to Role Admin   
+                if (chkUser.Succeeded)
+                {
+                    var result1 = await userManager.AddToRoleAsync(user, "HrManager");
+                }
             }
 
-            res = await roleManager.RoleExistsAsync("RegUser");
+            res = await roleManager.RoleExistsAsync("RegularUser");
             // creating Creating Employee role    
             if (res == false)
             {
                 var role = new IdentityRole();
-                role.Name = "RegUser";
+                role.Name = "RegularUser";
                 await roleManager.CreateAsync(role);
             }
 

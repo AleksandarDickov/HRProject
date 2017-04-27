@@ -21,7 +21,7 @@ namespace HRProject.Controllers
             _userRepository = new UserRepository(ctx);
         }
 
-        [Authorize(Roles = "SuperUser")]
+        [Authorize(Roles = "HrManager, SuperUser")]
         [HttpGet()]
         public IActionResult GetUsers()
         {
@@ -30,7 +30,7 @@ namespace HRProject.Controllers
             return Ok(userEntity);
         }
 
-      
+       
         [HttpGet("{userId}")]
         public IActionResult GetUser(string name)
         {
@@ -48,7 +48,8 @@ namespace HRProject.Controllers
         }
 
 
-        [HttpPut("{userId}")]
+
+        [HttpPut("{Name}")]
         public IActionResult UpdateUser(string userName, [FromBody] User updateUser)
         {
             if (updateUser == null || updateUser.Name != userName)
@@ -73,11 +74,14 @@ namespace HRProject.Controllers
             newUser.Sex = updateUser.Sex;
             newUser.NoteField = updateUser.NoteField;
             newUser.Keywords = updateUser.Keywords;
+            newUser.PasswordHash = updateUser.PasswordHash; 
+           
 
             _userRepository.UpdateUser(newUser);
             return new NoContentResult();
         }
 
+        [Authorize(Roles = "HrManager")]
         [HttpPost]
         public IActionResult AddUser([FromBody] User user)
         {

@@ -32,6 +32,6 @@ namespace HRProject.Models
     {
         SuperUser,
         RegularUser,
-        HrUser,
+        HrManager,
     }
 }
