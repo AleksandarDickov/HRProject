@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HRProject.Services
 {
-    interface IUserRepository
+    public interface IUserRepository
     {
         IEnumerable<User> GetUsers();
         User GetUser(string name);

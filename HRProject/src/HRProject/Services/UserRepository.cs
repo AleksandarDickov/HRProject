@@ -4,16 +4,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using HRProject.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace HRProject.Services
 {
     public class UserRepository : IUserRepository
     {
         private HRContext _context;
+        private UserManager<User> _userManager;
 
-        public UserRepository(HRContext context)
+        public UserRepository(HRContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public void AddUser(User user)

@@ -12,35 +12,70 @@ using HRProject.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using HRProject.Services;
 
 namespace HRProject
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
-        {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+        //public Startup(IHostingEnvironment env)
+        //{
+        //    var builder = new ConfigurationBuilder()
+        //        .SetBasePath(env.ContentRootPath)
+        //        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+        //        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
-            if (env.IsEnvironment("Development"))
-            {
-                // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
-                builder.AddApplicationInsightsSettings(developerMode: true);
-            }
+        //    if (env.IsEnvironment("Development"))
+        //    {
+        //        // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
+        //        builder.AddApplicationInsightsSettings(developerMode: true);
+        //    }
 
-            builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
-        }
+        //    builder.AddEnvironmentVariables();
+        //    Configuration = builder.Build();
+        //}
 
-        public IConfigurationRoot Configuration { get; }
+      //  public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthorization(options =>
+            {
+
+                options.AddPolicy("SuperUser",
+                    authBuilder =>
+                    {
+                        authBuilder.RequireRole("SuperUser");
+                    });
+
+                options.AddPolicy("HrManager",
+                   authBuilder =>
+                   {
+                       authBuilder.RequireRole("HrManager");
+                   });
+
+                options.AddPolicy("RegUser",
+                   authBuilder =>
+                   {
+                       authBuilder.RequireRole("RegUser");
+                   });
+
+                options.AddPolicy("SuperUser, HrManager",
+                   authBuilder =>
+                   {
+                       authBuilder.RequireRole("SuperUser", "HrManager");
+                   });
+
+                options.AddPolicy("SuperUser, HrManager,RegUser",
+                   authBuilder =>
+                   {
+                       authBuilder.RequireRole("RegUser", "SuperUser", "HrManager");
+                   });
+            });
+
             // Add framework services.
-            services.AddApplicationInsightsTelemetry(Configuration);
+         //   services.AddApplicationInsightsTelemetry(Configuration);
 
 
             //services.AddIdentity<User, IdentityRole>(config =>
@@ -57,6 +92,7 @@ namespace HRProject
             var connectionString = @"Server=(localdb)\mssqllocaldb;Database=HRContext;Trusted_Connection=True;";
             services.AddDbContext<HRContext>(o => o.UseSqlServer(connectionString));
 
+            services.AddSingleton<IUserRepository, UserRepository>();
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                .AddEntityFrameworkStores<HRContext>()
@@ -98,7 +134,7 @@ namespace HRProject
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
             RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
         {
-            loggerFactory.AddConsole(/*Configuration.GetSection("Logging")*/);
+            loggerFactory.AddConsole();
             app.UseIdentity();
             createRolesandUsers(roleManager, userManager);
             if (env.IsDevelopment())
@@ -157,7 +193,7 @@ namespace HRProject
                 role.Name = "HrManager";
                 await roleManager.CreateAsync(role);
 
-                var user = new IdentityUser();
+                var user = new User();
                 user.UserName = "Jela";
                 user.Email = "jela@gmail.com";
 

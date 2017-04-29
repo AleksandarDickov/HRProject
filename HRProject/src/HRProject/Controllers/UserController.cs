@@ -1,6 +1,8 @@
 ﻿using HRProject.Models;
 using HRProject.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,16 +11,18 @@ using System.Threading.Tasks;
 
 namespace HRProject.Controllers
 {
-    [Route("api/user")]
+    [Route("[controller]")]
     public class UserController : Controller
     {
-        private HRContext _ctx;
+        //private HRContext _ctx;
         private IUserRepository _userRepository;
+        private UserManager<User> _userManager;
 
-        public UserController(HRContext ctx)
+        public UserController(UserRepository userRepository, UserManager<User> userManager/*, HRContext ctx*/)
         {
-            _ctx = ctx;
-            _userRepository = new UserRepository(ctx);
+        //    _ctx = ctx;
+            _userManager = userManager;
+            _userRepository = userRepository;
         }
 
         [Authorize(Roles = "HrManager, SuperUser")]
@@ -81,24 +85,35 @@ namespace HRProject.Controllers
             return new NoContentResult();
         }
 
+        //[Authorize(Roles = "HrManager")]
+        //[HttpPost]
+        //UserManager<IdentityUser> userManager
+        //public IActionResult AddUser([FromBody] User user , UserManager<IdentityUser> userManager)
+        //{
+        //    if (user == null)
+        //    {
+        //        return BadRequest();
+        //    }
+        //    try
+        //    {
+        //        var chkUser = await UserManager.CreateAsync(user);
+        //        _userRepository.AddUser(user);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    return Ok(" Sve je u redu");
+        //}
+
         [Authorize(Roles = "HrManager")]
         [HttpPost]
-        public IActionResult AddUser([FromBody] User user)
-        {
-            if (user == null)
-            {
-                return BadRequest();
-            }
-            try
-            {
-                _userRepository.AddUser(user);
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
-
-            return Ok(" Sve je u redu");
+        public async Task<IActionResult> addUser([FromBody] User user)
+        { 
+            
+            var bb = await _userManager.CreateAsync(user);
+            return Ok(bb);
         }
 
         [HttpDelete("userId")]

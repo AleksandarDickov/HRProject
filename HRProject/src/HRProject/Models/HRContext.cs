@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace HRProject
 {
-    public class HRContext : IdentityDbContext<IdentityUser>
+    public class HRContext : IdentityDbContext<User>
     {
         public HRContext(DbContextOptions<HRContext> options) : base(options)
         {
