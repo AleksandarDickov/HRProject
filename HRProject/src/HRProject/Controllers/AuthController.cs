@@ -1,4 +1,5 @@
-﻿using HRProject.ViewModels;
+﻿using HRProject.Models;
+using HRProject.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
@@ -9,11 +10,13 @@ using System.Threading.Tasks;
 
 namespace HRProject.Controllers
 {
+    [Route("api/auth")]
     public class AuthController : Controller
     {
-        private SignInManager<IdentityUser> _signInManager;
 
-        public AuthController(SignInManager<IdentityUser> signInManager)
+        private SignInManager<User> _signInManager;
+
+        public AuthController(SignInManager<User> signInManager)
         {
             _signInManager = signInManager;
         }

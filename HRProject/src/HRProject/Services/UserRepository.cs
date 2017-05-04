@@ -11,12 +11,12 @@ namespace HRProject.Services
     public class UserRepository : IUserRepository
     {
         private HRContext _context;
-        private UserManager<User> _userManager;
+      //  private UserManager<User> _userManager;
 
-        public UserRepository(HRContext context, UserManager<User> userManager)
+        public UserRepository(HRContext context/*, UserManager<User> userManager*/)
         {
             _context = context;
-            _userManager = userManager;
+        //    _userManager = userManager;
         }
 
         public void AddUser(User user)

@@ -11,16 +11,16 @@ using System.Threading.Tasks;
 
 namespace HRProject.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/user")]
     public class UserController : Controller
     {
-        //private HRContext _ctx;
+    //    private HRContext _ctx;
         private IUserRepository _userRepository;
         private UserManager<User> _userManager;
 
-        public UserController(UserRepository userRepository, UserManager<User> userManager/*, HRContext ctx*/)
+        public UserController(IUserRepository userRepository, UserManager<User> userManager/*, HRContext ctx*/)
         {
-        //    _ctx = ctx;
+           // _ctx = ctx;
             _userManager = userManager;
             _userRepository = userRepository;
         }
@@ -107,14 +107,22 @@ namespace HRProject.Controllers
         //    return Ok(" Sve je u redu");
         //}
 
-        [Authorize(Roles = "HrManager")]
-        [HttpPost]
-        public async Task<IActionResult> addUser([FromBody] User user)
-        { 
-            
-            var bb = await _userManager.CreateAsync(user);
-            return Ok(bb);
+        [AllowAnonymous]
+        [HttpPost("Create")]
+        public async Task<IActionResult> CreateUser([FromBody] User Uuser)
+        {
+            var user = await _userManager.CreateAsync(Uuser, Uuser.PasswordHash);
+            return Ok(user);
         }
+
+        //[Authorize(Roles = "HrManager")]
+        //[HttpPost]
+        //public async Task<IActionResult> addUser([FromBody] User user)
+        //{ 
+            
+        //    var bb = await _userManager.CreateAsync(user);
+        //    return Ok(bb);
+        //}
 
         [HttpDelete("userId")]
         public IActionResult Delete(string name)

@@ -40,6 +40,8 @@ namespace HRProject
         // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
+
             services.AddAuthorization(options =>
             {
 
@@ -87,18 +89,18 @@ namespace HRProject
             //.AddEntityFrameworkStores<DbContext>();
 
             //services.AddLogging();
-            services.AddMvc();
+            
 
             var connectionString = @"Server=(localdb)\mssqllocaldb;Database=HRContext;Trusted_Connection=True;";
             services.AddDbContext<HRContext>(o => o.UseSqlServer(connectionString));
 
             services.AddSingleton<IUserRepository, UserRepository>();
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<User, IdentityRole>()
                .AddEntityFrameworkStores<HRContext>()
                .AddDefaultTokenProviders();
 
-            services.AddIdentity<IdentityUser, IdentityRole>(config =>
+            services.AddIdentity<User, IdentityRole>(config =>
             {
                 config.User.RequireUniqueEmail = true;
                 config.Password.RequiredLength = 2;
@@ -132,7 +134,7 @@ namespace HRProject
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
-            RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+            RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
         {
             loggerFactory.AddConsole();
             app.UseIdentity();
@@ -158,7 +160,7 @@ namespace HRProject
                     defaults: new { controller = "Auth", action = "Login" });
             });
         }
-        public async void createRolesandUsers(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+        public async void createRolesandUsers(RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
         {
             if (!roleManager.RoleExistsAsync("SuperUser").Result)
             {
@@ -170,7 +172,7 @@ namespace HRProject
 
                 //Here we create a Admin super user who will maintain the website                  
 
-                var user = new IdentityUser();
+                var user = new User();
                 user.UserName = "Aca";
                 user.Email = "aca@gmail.com";
 
