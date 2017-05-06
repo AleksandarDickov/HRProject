@@ -102,6 +102,7 @@ namespace HRProject
 
             services.AddIdentity<User, IdentityRole>(config =>
             {
+                config.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@";
                 config.User.RequireUniqueEmail = true;
                 config.Password.RequiredLength = 2;
                 config.Password.RequireDigit = false;

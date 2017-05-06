@@ -53,5 +53,22 @@ namespace HRProject.Services
             _context.RegUsers.Update(user);
             _context.SaveChanges();
         }
+
+        public bool AddRole(string name, string roleName)
+        {
+            var role = _context.Roles.FirstOrDefault(r => r.Name == roleName);
+            if (role != null)
+            {
+                var entity = _context.RegUsers.Include(u => u.Roles).FirstOrDefault(t => t.Name == name);
+                if (!entity.Roles.Any(r => r.RoleId == role.Id))
+                {
+                    entity.Roles.Add(new Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserRole<string> { RoleId = role.Id, UserId = entity.Id });
+                    _context.SaveChanges();
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

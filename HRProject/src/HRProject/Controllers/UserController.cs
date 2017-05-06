@@ -25,7 +25,7 @@ namespace HRProject.Controllers
             _userRepository = userRepository;
         }
 
-        [Authorize(Roles = "HrManager, SuperUser")]
+       // [Authorize(Roles = "HrManager, SuperUser")]
         [HttpGet()]
         public IActionResult GetUsers()
         {
@@ -53,7 +53,7 @@ namespace HRProject.Controllers
 
 
 
-        [HttpPut("{Name}")]
+        [HttpPut("{username}")]
         public IActionResult UpdateUser(string userName, [FromBody] User updateUser)
         {
             if (updateUser == null || updateUser.Name != userName)
@@ -62,10 +62,14 @@ namespace HRProject.Controllers
             }
 
             var newUser = _userRepository.GetUser(userName);
+
+            
             if (newUser == null)
             {
                 return NotFound();
             }
+
+           
 
             newUser.Name = updateUser.Name;
             newUser.SurName = updateUser.SurName;
@@ -78,10 +82,24 @@ namespace HRProject.Controllers
             newUser.Sex = updateUser.Sex;
             newUser.NoteField = updateUser.NoteField;
             newUser.Keywords = updateUser.Keywords;
-            newUser.PasswordHash = updateUser.PasswordHash; 
-           
-
+            newUser.PasswordHash = updateUser.PasswordHash;
+            newUser.Email = updateUser.Email;
+            //newUser.UserName = updateUser.UserName;
             _userRepository.UpdateUser(newUser);
+            //_userManager.UpdateNormalizedUserNameAsync(newUser).Wait();
+
+
+            if (User.IsInRole("SuperUser"))
+            {
+                //var result1 = await _userManager.AddToRoleAsync(newUser, "HrManager");
+                var result = _userRepository.AddRole(newUser.Name, "HrManager");
+            }
+            //if (User.IsInRole("SuperUser"))
+            //{
+            //    var result1 = await _userManager.AddToRoleAsync(newUser, "HrManager");
+            //}
+
+
             return new NoContentResult();
         }
 
@@ -109,20 +127,24 @@ namespace HRProject.Controllers
 
         [AllowAnonymous]
         [HttpPost("Create")]
-        public async Task<IActionResult> CreateUser([FromBody] User Uuser)
+        public async Task<IActionResult> CreateUser([FromBody] User user)
         {
-            var user = await _userManager.CreateAsync(Uuser, Uuser.PasswordHash);
+            if(string.IsNullOrEmpty(user.UserName))
+            {
+                user.UserName = Guid.NewGuid().ToString();
+            }
+            var userResult = await _userManager.CreateAsync(user, user.Password);
+            if (userResult.Succeeded)
+            {
+                var result = await _userManager.AddToRoleAsync(user, "RegularUser");
+                if(!result.Succeeded)
+                {
+                    return BadRequest(result.Errors);
+                }
+            }
             return Ok(user);
         }
 
-        //[Authorize(Roles = "HrManager")]
-        //[HttpPost]
-        //public async Task<IActionResult> addUser([FromBody] User user)
-        //{ 
-            
-        //    var bb = await _userManager.CreateAsync(user);
-        //    return Ok(bb);
-        //}
 
         [HttpDelete("userId")]
         public IActionResult Delete(string name)

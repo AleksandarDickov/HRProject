@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HRProject.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/job")]
     public class JobController : Controller
     {
         private IJobRepository _jobRepository;

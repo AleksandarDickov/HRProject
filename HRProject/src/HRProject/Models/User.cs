@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,6 +10,7 @@ namespace HRProject.Models
 {
     public class User : IdentityUser
     {
+        //private string email;
         //[Key]
         //[Required]
         //public int UserId { get; set; }
@@ -22,7 +24,35 @@ namespace HRProject.Models
         public DateTime DateOfBirth { get; set; }
         public string Sex { get; set; }
         public string NoteField { get; set; }
-        
+        [NotMapped]
+        public string Password { get; set; }
+        //public override string UserName
+        //{
+        //    get
+        //    {
+        //        return email;
+        //    }
+
+        //    set
+        //    {
+        //        email = value;
+        //    }
+        //}
+
+        //public override string Email
+        //{
+        //    get
+        //    {
+        //        return email;
+        //    }
+
+        //    set
+        //    {
+        //        email = value;
+        //    }
+        //}
+
+
         public ICollection<JobPosition> Keywords { get; set; }
 
         public UserTipe user { get; set; }
