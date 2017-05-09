@@ -15,5 +15,6 @@ namespace HRProject.Services
         User Find(string name);
         void Remove(string name);
         bool AddRole(string name, string roleName);
+        bool RemoveRole(string name, string roleName);
     }
 }

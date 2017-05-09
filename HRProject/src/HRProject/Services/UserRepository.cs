@@ -71,8 +71,21 @@ namespace HRProject.Services
             return false;
         }
 
+        public bool RemoveRole (string name, string roleName)
+        {
+            var role = _context.Roles.FirstOrDefault(r => r.Name == roleName);
+            if (role != null)
+            {
+                var entity = _context.RegUsers.Include(u => u.Roles).FirstOrDefault(t => t.Name == name);
+                if (!entity.Roles.Any(r => r.RoleId == role.Id))
+                {
+                    entity.Roles.Remove(new Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserRole<string> { RoleId = role.Id, UserId = entity.Id });
+                    _context.SaveChanges();
+                    return true;
+                }
+            }
 
-
-
+            return false;
+        }
     }
 }
