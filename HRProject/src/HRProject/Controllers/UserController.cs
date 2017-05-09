@@ -14,18 +14,18 @@ namespace HRProject.Controllers
     [Route("api/user")]
     public class UserController : Controller
     {
-    //    private HRContext _ctx;
+        //    private HRContext _ctx;
         private IUserRepository _userRepository;
         private UserManager<User> _userManager;
 
         public UserController(IUserRepository userRepository, UserManager<User> userManager/*, HRContext ctx*/)
         {
-           // _ctx = ctx;
+            // _ctx = ctx;
             _userManager = userManager;
             _userRepository = userRepository;
         }
 
-       // [Authorize(Roles = "HrManager, SuperUser")]
+        // [Authorize(Roles = "HrManager, SuperUser")]
         [HttpGet()]
         public IActionResult GetUsers()
         {
@@ -34,7 +34,7 @@ namespace HRProject.Controllers
             return Ok(userEntity);
         }
 
-       
+
         [HttpGet("{userId}")]
         public IActionResult GetUser(string name)
         {
@@ -48,12 +48,54 @@ namespace HRProject.Controllers
 
             _userRepository.GetUser(name);
 
-            return Ok(user);    
+            return Ok(user);
         }
 
+        [HttpPut("RegToHr/{userName}")]
+        public IActionResult UpdateToHrRole (string userName, [FromBody] User updateUser)
+        {
+            if (updateUser == null || updateUser.Name != userName)
+            {
+                return BadRequest();
+            }
 
+            var newUser = _userRepository.GetUser(userName);
 
-        [HttpPut("{username}")]
+            _userRepository.UpdateUser(newUser);
+
+            if (User.IsInRole("SuperUser"))
+            {
+                var result = _userRepository.AddRole(newUser.Name, "HrManager");
+                _userRepository.RemoveRole(newUser.Name, "RegularUser");
+            }
+
+            return Ok("Updated to Hr");
+
+        }
+
+        [HttpPut("RegToSuper/{userName}")]
+        public IActionResult UpdateToSuperUserRole(string userName, [FromBody] User updateUser)
+        {
+            if (updateUser == null || updateUser.Name != userName)
+            {
+                return BadRequest();
+            }
+
+            var newUser = _userRepository.GetUser(userName);
+
+            _userRepository.UpdateUser(newUser);
+
+            if (User.IsInRole("SuperUser"))
+            {
+                var result = _userRepository.AddRole(newUser.Name, "SuperUser");
+                _userRepository.RemoveRole(newUser.Name, "RegularUser");
+            }
+
+            return Ok("Updated to SuperUser");
+
+        }
+
+        [HttpPut("{userName}")]
         public IActionResult UpdateUser(string userName, [FromBody] User updateUser)
         {
             if (updateUser == null || updateUser.Name != userName)
@@ -63,13 +105,11 @@ namespace HRProject.Controllers
 
             var newUser = _userRepository.GetUser(userName);
 
-            
+
             if (newUser == null)
             {
                 return NotFound();
             }
-
-           
 
             newUser.Name = updateUser.Name;
             newUser.SurName = updateUser.SurName;
@@ -85,45 +125,19 @@ namespace HRProject.Controllers
             newUser.PasswordHash = updateUser.PasswordHash;
             newUser.Email = updateUser.Email;
             //newUser.UserName = updateUser.UserName;
+
             _userRepository.UpdateUser(newUser);
-            //_userManager.UpdateNormalizedUserNameAsync(newUser).Wait();
 
-
-            if (User.IsInRole("SuperUser"))
-            {
-                //var result1 = await _userManager.AddToRoleAsync(newUser, "HrManager");
-                var result = _userRepository.AddRole(newUser.Name, "HrManager");
-            }
             //if (User.IsInRole("SuperUser"))
             //{
-            //    var result1 = await _userManager.AddToRoleAsync(newUser, "HrManager");
+            //    //var result1 = await _userManager.AddToRoleAsync(newUser, "HrManager");
+            //    var result = _userRepository.AddRole(newUser.Name, "HrManager");
+            //    _userRepository.RemoveRole(newUser.Name, "RegularUser");
             //}
-
 
             return new NoContentResult();
         }
 
-        //[Authorize(Roles = "HrManager")]
-        //[HttpPost]
-        //UserManager<IdentityUser> userManager
-        //public IActionResult AddUser([FromBody] User user , UserManager<IdentityUser> userManager)
-        //{
-        //    if (user == null)
-        //    {
-        //        return BadRequest();
-        //    }
-        //    try
-        //    {
-        //        var chkUser = await UserManager.CreateAsync(user);
-        //        _userRepository.AddUser(user);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    return Ok(" Sve je u redu");
-        //}
 
         [AllowAnonymous]
         [HttpPost("Create")]
