@@ -26,6 +26,7 @@ namespace HRProject.Models
         public string NoteField { get; set; }
         [NotMapped]
         public string Password { get; set; }
+        public DateTime DateCreated { get; set; }
         //public override string UserName
         //{
         //    get

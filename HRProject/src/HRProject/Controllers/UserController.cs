@@ -131,8 +131,11 @@ namespace HRProject.Controllers
         {
             if(string.IsNullOrEmpty(user.UserName))
             {
-                user.UserName = Guid.NewGuid().ToString();
+                user.UserName = Guid.NewGuid().ToString();               
             }
+
+            user.DateCreated = DateTime.Now;
+
             var userResult = await _userManager.CreateAsync(user, user.Password);
             if (userResult.Succeeded)
             {
@@ -141,6 +144,7 @@ namespace HRProject.Controllers
                 {
                     return BadRequest(result.Errors);
                 }
+            
             }
             return Ok(user);
         }
