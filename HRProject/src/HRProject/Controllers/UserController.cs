@@ -52,7 +52,7 @@ namespace HRProject.Controllers
         }
 
         [HttpPut("RegToHr/{userName}")]
-        public IActionResult UpdateToHrRole (string userName, [FromBody] User updateUser)
+        public IActionResult UpdateToHrRole(string userName, [FromBody] User updateUser)
         {
             if (updateUser == null || updateUser.Name != userName)
             {
@@ -95,6 +95,25 @@ namespace HRProject.Controllers
 
         }
 
+
+        [HttpGet("{id}")]
+        public IActionResult GetJobsById(string id, bool includeJob = false)
+        {
+            var jobs = _userRepository.ListByHr(id, includeJob);
+
+            if (jobs == null)
+            {
+                return NotFound();
+            }
+
+            if (includeJob)
+            {
+                return Ok(jobs);
+            }
+            return BadRequest();
+        }
+
+
         [HttpPut("{userName}")]
         public IActionResult UpdateUser(string userName, [FromBody] User updateUser)
         {
@@ -121,7 +140,6 @@ namespace HRProject.Controllers
             newUser.DateOfBirth = updateUser.DateOfBirth;
             newUser.Sex = updateUser.Sex;
             newUser.NoteField = updateUser.NoteField;
-            newUser.Keywords = updateUser.Keywords;
             newUser.PasswordHash = updateUser.PasswordHash;
             newUser.Email = updateUser.Email;
             //newUser.UserName = updateUser.UserName;
@@ -143,9 +161,9 @@ namespace HRProject.Controllers
         [HttpPost("Create")]
         public async Task<IActionResult> CreateUser([FromBody] User user)
         {
-            if(string.IsNullOrEmpty(user.UserName))
+            if (string.IsNullOrEmpty(user.UserName))
             {
-                user.UserName = Guid.NewGuid().ToString();               
+                user.UserName = Guid.NewGuid().ToString();
             }
 
             user.DateCreated = DateTime.Now;
@@ -154,11 +172,11 @@ namespace HRProject.Controllers
             if (userResult.Succeeded)
             {
                 var result = await _userManager.AddToRoleAsync(user, "RegularUser");
-                if(!result.Succeeded)
+                if (!result.Succeeded)
                 {
                     return BadRequest(result.Errors);
                 }
-            
+
             }
             return Ok(user);
         }
@@ -175,5 +193,33 @@ namespace HRProject.Controllers
             _userRepository.Remove(name);
             return new NoContentResult();
         }
+
+        public IActionResult Sort([FromQuery] string sortBy)
+        {
+            var user = from u in _userRepository.GetUsers()
+                      select u;
+
+            if (sortBy == "Yesterday")
+            {
+                user = user.OrderBy(p => p.DateCreated.AddDays(-1));
+            }
+
+            else if (sortBy == "Last Month")
+            {
+                user = user.OrderBy(p => p.DateCreated.AddMonths(-1));
+            }
+
+            else if (sortBy == "Last Week")
+            {
+                user = user.OrderBy(p => p.DateCreated.AddDays(-7));
+            }
+            else if (sortBy == "Last year")
+            {
+                user = user.OrderBy(p => p.DateCreated.AddYears(-1));
+            }
+
+            return Ok(user);
         }
+
+    }
 }
