@@ -18,5 +18,22 @@ namespace HRProject
         public DbSet<Company> Companys { get; set; }
         public DbSet<JobPosition> JobPositions { get; set; }
         public DbSet<User> RegUsers { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<UserInJobs>()
+                .HasKey(uIj => new { uIj.JobId, uIj.UserId });
+
+            modelBuilder.Entity<UserInJobs>()
+                .HasOne(bc => bc.User)
+                .WithMany(b => b.UserInJobs)
+                .HasForeignKey(bc => bc.UserId);
+
+            modelBuilder.Entity<UserInJobs>()
+                .HasOne(bc => bc.JobPosition)
+                .WithMany(c => c.UserInJobs)
+                .HasForeignKey(bc => bc.JobId);
+        }
     }
 }
