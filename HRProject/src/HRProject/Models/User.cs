@@ -10,10 +10,6 @@ namespace HRProject.Models
 {
     public class User : IdentityUser
     {
-        //private string email;
-        //[Key]
-        //[Required]
-        //public int UserId { get; set; }
         public string Name { get; set; }
         public string SurName { get; set; }
         public string City { get; set; }
@@ -27,42 +23,13 @@ namespace HRProject.Models
         [NotMapped]
         public string Password { get; set; }
         public DateTime DateCreated { get; set; }
-        //public override string UserName
-        //{
-        //    get
-        //    {
-        //        return email;
-        //    }
 
-        //    set
-        //    {
-        //        email = value;
-        //    }
-        //}
+        public virtual ICollection<UserInJobs> UserInJobs { get; set; }
 
-        //public override string Email
-        //{
-        //    get
-        //    {
-        //        return email;
-        //    }
+        [InverseProperty("CreatedBy")]
+        public virtual ICollection<JobPosition> CreatedJobs { get; set; }
 
-        //    set
-        //    {
-        //        email = value;
-        //    }
-        //}
+        //public ICollection<JobPosition> AppliedJobs { get; set; }
 
-
-        public ICollection<JobPosition> Keywords { get; set; }
-
-        public UserTipe user { get; set; }
-    }
-
-    public enum UserTipe
-    {
-        SuperUser,
-        RegularUser,
-        HrManager,
     }
 }

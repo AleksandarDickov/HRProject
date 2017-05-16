@@ -13,7 +13,7 @@ namespace HRProject.Services
         private HRContext _context;
       //  private UserManager<User> _userManager;
 
-        public UserRepository(HRContext context/*, UserManager<User> userManager*/)
+        public UserRepository(HRContext context)
         {
             _context = context;
         //    _userManager = userManager;
@@ -54,6 +54,28 @@ namespace HRProject.Services
             _context.SaveChanges();
         }
 
+        public ICollection<JobPosition> ListByHr (string id, bool includeJob)
+        {
+
+            var users = _context.Users.Include(c => c.CreatedJobs)
+                    .FirstOrDefault(c => c.Id == id);
+            if (users != null)
+            {
+                // return users.SelectMany(u => u.CreatedJobs).ToList();
+                return users.CreatedJobs.ToList();
+            }
+            return null;
+        }
+
+        //public ICollection<JobPosition> ListByRole (string name, string roleName)
+        //{
+        //    var role = _context.Roles.FirstOrDefault(r => r.Name == roleName);
+        //    if (role != null)
+        //    {
+
+        //    }
+        //}
+
         public bool AddRole(string name, string roleName)
         {
             var role = _context.Roles.FirstOrDefault(r => r.Name == roleName);
@@ -71,7 +93,7 @@ namespace HRProject.Services
             return false;
         }
 
-        public bool RemoveRole (string name, string roleName)
+        public bool RemoveRole(string name, string roleName)
         {
             var role = _context.Roles.FirstOrDefault(r => r.Name == roleName);
             if (role != null)
@@ -86,6 +108,18 @@ namespace HRProject.Services
             }
 
             return false;
+        }
+
+        public ICollection<User> FindRole(string roleName)
+        {
+            var role = _context.Roles.FirstOrDefault(r => r.Name == roleName);
+            if (role != null)
+            {
+                var entity = _context.RegUsers.Include(u => u.Roles).Where(u => u.Roles.Any(r => r.RoleId == role.Id)).ToList();
+                return entity;
+            }
+            return null;
+           
         }
     }
 }
