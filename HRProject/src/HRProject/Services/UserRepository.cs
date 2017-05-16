@@ -56,13 +56,23 @@ namespace HRProject.Services
         {
 
             var users = _context.Users.Include(c => c.CreatedJobs)
-                    .Where(c => c.Id == id);
+                    .FirstOrDefault(c => c.Id == id);
             if (users != null)
             {
-                return users.SelectMany(u => u.CreatedJobs).ToList();
+                // return users.SelectMany(u => u.CreatedJobs).ToList();
+                return users.CreatedJobs.ToList();
             }
             return null;
         }
+
+        //public ICollection<JobPosition> ListByRole (string name, string roleName)
+        //{
+        //    var role = _context.Roles.FirstOrDefault(r => r.Name == roleName);
+        //    if (role != null)
+        //    {
+
+        //    }
+        //}
 
         public bool AddRole(string name, string roleName)
         {
