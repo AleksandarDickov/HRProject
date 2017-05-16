@@ -11,12 +11,10 @@ namespace HRProject.Services
     public class UserRepository : IUserRepository
     {
         private HRContext _context;
-      //  private UserManager<User> _userManager;
 
-        public UserRepository(HRContext context/*, UserManager<User> userManager*/)
+        public UserRepository(HRContext context)
         {
             _context = context;
-        //    _userManager = userManager;
         }
 
         public void AddUser(User user)
@@ -52,6 +50,18 @@ namespace HRProject.Services
         {
             _context.RegUsers.Update(user);
             _context.SaveChanges();
+        }
+
+        public ICollection<JobPosition> ListByHr (string id, bool includeJob)
+        {
+
+            var users = _context.Users.Include(c => c.CreatedJobs)
+                    .Where(c => c.Id == id);
+            if (users != null)
+            {
+                return users.SelectMany(u => u.CreatedJobs).ToList();
+            }
+            return null;
         }
 
         public bool AddRole(string name, string roleName)

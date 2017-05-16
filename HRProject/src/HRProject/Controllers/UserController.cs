@@ -96,6 +96,25 @@ namespace HRProject.Controllers
 
         }
 
+
+        [HttpGet("{id}")]
+        public IActionResult GetJobsById(string id, bool includeJob = false)
+        {
+            var jobs = _userRepository.ListByHr(id, includeJob);
+
+            if (jobs == null)
+            {
+                return NotFound();
+            }
+
+            if (includeJob)
+            {
+                return Ok(jobs);
+            }
+            return BadRequest();
+        }
+
+
         [HttpPut("{userName}")]
         public IActionResult UpdateUser(string userName, [FromBody] User updateUser)
         {
@@ -122,7 +141,6 @@ namespace HRProject.Controllers
             newUser.DateOfBirth = updateUser.DateOfBirth;
             newUser.Sex = updateUser.Sex;
             newUser.NoteField = updateUser.NoteField;
-            newUser.Keywords = updateUser.Keywords;
             newUser.PasswordHash = updateUser.PasswordHash;
             newUser.Email = updateUser.Email;
             //newUser.UserName = updateUser.UserName;
