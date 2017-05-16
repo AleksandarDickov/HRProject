@@ -11,12 +11,12 @@ namespace HRProject.Services
     public class UserRepository : IUserRepository
     {
         private HRContext _context;
-      //  private UserManager<User> _userManager;
+        //  private UserManager<User> _userManager;
 
         public UserRepository(HRContext context/*, UserManager<User> userManager*/)
         {
             _context = context;
-        //    _userManager = userManager;
+            //    _userManager = userManager;
         }
 
         public void AddUser(User user)
@@ -71,7 +71,7 @@ namespace HRProject.Services
             return false;
         }
 
-        public bool RemoveRole (string name, string roleName)
+        public bool RemoveRole(string name, string roleName)
         {
             var role = _context.Roles.FirstOrDefault(r => r.Name == roleName);
             if (role != null)
@@ -86,6 +86,18 @@ namespace HRProject.Services
             }
 
             return false;
+        }
+
+        public ICollection<User> FindRole(string roleName)
+        {
+            var role = _context.Roles.FirstOrDefault(r => r.Name == roleName);
+            if (role != null)
+            {
+                var entity = _context.RegUsers.Include(u => u.Roles).Where(u => u.Roles.Any(r => r.RoleId == role.Id)).ToList();
+                return entity;
+            }
+            return null;
+           
         }
     }
 }

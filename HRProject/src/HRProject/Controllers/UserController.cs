@@ -34,6 +34,13 @@ namespace HRProject.Controllers
             return Ok(userEntity);
         }
 
+        [HttpGet("GetByType/{roleName}")]
+        public IActionResult GetByType(string roleName)
+        {
+            var newUser = _userRepository.FindRole(roleName);
+            _userRepository.GetUsers();
+            return Ok();
+        }
 
         [HttpGet("{userId}")]
         public IActionResult GetUser(string name)

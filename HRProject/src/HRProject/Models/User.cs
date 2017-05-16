@@ -54,6 +54,9 @@ namespace HRProject.Models
         //}
 
 
+        [InverseProperty("FindByUserRole")]
+        public virtual ICollection<User> FindUserRole { get; set; }
+
         public ICollection<JobPosition> Keywords { get; set; }
 
         public UserTipe user { get; set; }

@@ -1,4 +1,5 @@
 ﻿using HRProject.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,7 @@ namespace HRProject.Services
         void Remove(string name);
         bool AddRole(string name, string roleName);
         bool RemoveRole(string name, string roleName);
+        
+        ICollection<User> FindRole(string roleName);
     }
 }
