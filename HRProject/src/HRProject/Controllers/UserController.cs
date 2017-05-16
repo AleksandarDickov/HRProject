@@ -40,7 +40,7 @@ namespace HRProject.Controllers
         {
             var newUser = _userRepository.FindRole(roleName);
             _userRepository.GetUsers();
-            return Ok();
+            return Ok(newUser);
         }
 
         [HttpGet("{userId}")]

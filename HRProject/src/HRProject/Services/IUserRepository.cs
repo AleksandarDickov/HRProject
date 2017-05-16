@@ -17,7 +17,7 @@ namespace HRProject.Services
         void Remove(string name);
         bool AddRole(string name, string roleName);
         bool RemoveRole(string name, string roleName);
-        
+        ICollection<JobPosition> ListByHr(string id, bool includeJob);
         ICollection<User> FindRole(string roleName);
     }
 }
