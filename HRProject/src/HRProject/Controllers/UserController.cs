@@ -104,6 +104,20 @@ namespace HRProject.Controllers
         }
 
 
+        [HttpGet("status/{status}")]
+        public IActionResult GetJobsByStatus(Status status)
+        {
+            var users = _userRepository.ListByStatus(status);
+
+            if (users == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(users);
+        }
+
+
         [HttpGet("{id}")]
         public IActionResult GetJobsById(string id, bool includeJob = false)
         {
@@ -121,6 +135,16 @@ namespace HRProject.Controllers
             return BadRequest();
         }
 
+        //[HttpPut("{status}")]
+        //public Status? ChangeStatus(string status)
+        //{
+        //    Status parsedStatus;
+        //    if(Enum.TryParse<Status>(status, true, out parsedStatus))
+        //    {
+        //        return parsedStatus;
+        //    }
+        //    return null;
+        //}
 
         [HttpPut("{userName}")]
         public IActionResult UpdateUser(string userName, [FromBody] User updateUser)
@@ -138,13 +162,14 @@ namespace HRProject.Controllers
                 return NotFound();
             }
 
+
             newUser.Name = updateUser.Name;
             newUser.SurName = updateUser.SurName;
             newUser.City = updateUser.City;
             newUser.Country = updateUser.Country;
             newUser.PartTime_FullTime = updateUser.PartTime_FullTime;
             newUser.WorkExperience = updateUser.WorkExperience;
-            newUser.Status = updateUser.Status;
+            newUser.StatusOfUser = updateUser.StatusOfUser;
             newUser.DateOfBirth = updateUser.DateOfBirth;
             newUser.Sex = updateUser.Sex;
             newUser.NoteField = updateUser.NoteField;
@@ -162,7 +187,7 @@ namespace HRProject.Controllers
             //}
 
             return new NoContentResult();
-        }
+            }
 
 
         [AllowAnonymous]

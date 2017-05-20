@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using HRProject.Services;
 using Newtonsoft.Json;
+using Logon.Services;
 
 namespace HRProject
 {
@@ -44,6 +45,8 @@ namespace HRProject
             services.AddMvc().AddJsonOptions(options => {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             }); ;
+
+            services.AddTransient<IEmailSender, AuthMessageSender>();
 
             services.AddAuthorization(options =>
             {
@@ -161,7 +164,7 @@ namespace HRProject
                  config.MapRoute(
                     name: "Default",
                     template: "{controller}/{action}/{id?}",
-                    defaults: new { controller = "Auth", action = "Login" });
+                    defaults: new { controller = "Account", action = "Login" });
             });
         }
         public async void createRolesandUsers(RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
@@ -179,6 +182,8 @@ namespace HRProject
                 var user = new User();
                 user.UserName = "Aca";
                 user.Email = "aca@gmail.com";
+                user.EmailConfirmed = true;
+                user.TwoFactorEnabled = false;
 
                 string userPWD = "sifra";
 

@@ -110,6 +110,17 @@ namespace HRProject.Services
             return false;
         }
 
+        public ICollection<User> ListByStatus(Status status)
+        {
+            var users = _context.Users
+                   .Where(c => c.StatusOfUser == status);
+            if (users != null)
+            {
+                return users.ToList();
+            }
+            return null;
+        }
+
         public ICollection<User> FindRole(string roleName)
         {
             var role = _context.Roles.FirstOrDefault(r => r.Name == roleName);
