@@ -147,8 +147,5 @@ namespace HRProject.Controllers
 
             return Ok(company);
         }
-
-
-
     }
 }
