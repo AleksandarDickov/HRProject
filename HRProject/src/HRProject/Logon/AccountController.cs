@@ -110,7 +110,7 @@ namespace Logon.Controllers
             {
                 var user = new User { UserName = model.UserName, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
-                var result1 = await _userManager.AddToRoleAsync(user, "RegUser");
+                var result1 = await _userManager.AddToRoleAsync(user, "RegularUser");
                 if (result.Succeeded)
                 {
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713

@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace Logon.Services
 {
@@ -63,10 +64,16 @@ namespace Logon.Services
 
             using (var client = new SmtpClient())
             {
-                client.LocalDomain = "smtp.gmail.com";
-                await client.ConnectAsync("smtp.relay.uri", 25, SecureSocketOptions.None).ConfigureAwait(false);
-                await client.SendAsync(emailMessage).ConfigureAwait(false);
-                await client.DisconnectAsync(true).ConfigureAwait(false);
+                //client.LocalDomain = "smtp.gmail.com";
+                //await client.ConnectAsync("smtp.relay.uri", 25, SecureSocketOptions.None).ConfigureAwait(false);
+                //await client.SendAsync(emailMessage).ConfigureAwait(false);
+                //await client.DisconnectAsync(true).ConfigureAwait(false);
+                client.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTlsWhenAvailable);
+                client.AuthenticationMechanisms.Remove("XOAUTH2"); // Must be removed for Gmail SMTP
+                client.Authenticate("dicckov1992@gmail.com", "dickovaca123");
+                client.Send(emailMessage);
+                client.Disconnect(true);
+
             };
         }
     }
