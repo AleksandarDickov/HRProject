@@ -12,9 +12,12 @@
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
   </PropertyGroup>
-  <PropertyGroup>
+  <PropertyGroup> 
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
+  <PropertyGroup>
+  <UserSecretsId>6guYNWsdFyikG8eC9neS2kKR</UserSecretsId>
+</PropertyGroup>
   <ItemGroup>
     <DnxInvisibleFolder Include="Views\Account\" />
   </ItemGroup>
