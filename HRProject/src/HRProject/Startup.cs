@@ -14,36 +14,42 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using HRProject.Services;
 using Newtonsoft.Json;
+using Logon.Services;
 
 namespace HRProject
 {
     public class Startup
     {
-        //public Startup(IHostingEnvironment env)
-        //{
-        //    var builder = new ConfigurationBuilder()
-        //        .SetBasePath(env.ContentRootPath)
-        //        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-        //        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+        public IConfigurationRoot Configuration { get; set; }
+        private IConfigurationBuilder builder;
 
-        //    if (env.IsEnvironment("Development"))
-        //    {
-        //        // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
-        //        builder.AddApplicationInsightsSettings(developerMode: true);
-        //    }
+        public Startup(IHostingEnvironment env)
+        {
+            builder = new ConfigurationBuilder()
+         .SetBasePath(env.ContentRootPath)
+         .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+         .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+            //.AddJsonFile("secrets.json", optional: true, reloadOnChange: true);
 
-        //    builder.AddEnvironmentVariables();
-        //    Configuration = builder.Build();
-        //}
+            if (env.IsDevelopment())
+            {
+                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
+                builder.AddUserSecrets("145928039260-jjhlcd88o5vvr0jipsh0pq9i9hbp5m5u.apps.googleusercontent.com");
+               // builder.AddUserSecrets<Startup>();
+            }
 
-      //  public IConfigurationRoot Configuration { get; }
+            builder.AddEnvironmentVariables();
+            Configuration = builder.Build();
+        }
 
-        // This method gets called by the runtime. Use this method to add services to the container
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().AddJsonOptions(options => {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             }); ;
+
+            services.AddTransient<IEmailSender, AuthMessageSender>();
 
             services.AddAuthorization(options =>
             {
@@ -113,7 +119,7 @@ namespace HRProject
                 config.Password.RequireUppercase = false;
                 config.Password.RequireLowercase = false;
 
-                config.Cookies.ApplicationCookie.LoginPath = "/Auth/Login";
+                config.Cookies.ApplicationCookie.LoginPath = "/Account/Login";
                 config.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents()
                 {
                     OnRedirectToLogin = async ctx =>
@@ -142,7 +148,7 @@ namespace HRProject
         {
             loggerFactory.AddConsole();
             app.UseIdentity();
-            createRolesandUsers(roleManager, userManager);
+          
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -152,8 +158,14 @@ namespace HRProject
                 app.UseExceptionHandler();
             }
 
+            app.UseGoogleAuthentication(new GoogleOptions()
+            {
+                ClientId = "145928039260-jjhlcd88o5vvr0jipsh0pq9i9hbp5m5u.apps.googleusercontent.com",
+                ClientSecret = "6guYNWsdFyikG8eC9neS2kKR"
+            });
+
+            createRolesandUsers(roleManager, userManager);
             //app.UseApplicationInsightsRequestTelemetry();
-            //app.UseIdentity();
             //app.UseApplicationInsightsExceptionTelemetry();
 
             app.UseMvc(config =>
@@ -161,7 +173,7 @@ namespace HRProject
                  config.MapRoute(
                     name: "Default",
                     template: "{controller}/{action}/{id?}",
-                    defaults: new { controller = "Auth", action = "Login" });
+                    defaults: new { controller = "Account", action = "Login" });
             });
         }
         public async void createRolesandUsers(RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
@@ -179,6 +191,8 @@ namespace HRProject
                 var user = new User();
                 user.UserName = "Aca";
                 user.Email = "aca@gmail.com";
+                user.EmailConfirmed = true;
+                user.TwoFactorEnabled = false;
 
                 string userPWD = "sifra";
 

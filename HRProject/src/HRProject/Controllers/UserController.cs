@@ -15,13 +15,13 @@ namespace HRProject.Controllers
     [Route("api/user")]
     public class UserController : Controller
     {
-        //    private HRContext _ctx;
+        private HRContext _ctx;
         private IUserRepository _userRepository;
         private UserManager<User> _userManager;
 
-        public UserController(IUserRepository userRepository, UserManager<User> userManager/*, HRContext ctx*/)
+        public UserController(IUserRepository userRepository, UserManager<User> userManager, HRContext ctx)
         {
-            // _ctx = ctx;
+            _ctx = ctx;
             _userManager = userManager;
             _userRepository = userRepository;
         }
@@ -104,6 +104,20 @@ namespace HRProject.Controllers
         }
 
 
+        [HttpGet("status/{status}")]
+        public IActionResult GetJobsByStatus(Status status)
+        {
+            var users = _userRepository.ListByStatus(status);
+
+            if (users == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(users);
+        }
+
+
         [HttpGet("{id}")]
         public IActionResult GetJobsById(string id, bool includeJob = false)
         {
@@ -121,6 +135,16 @@ namespace HRProject.Controllers
             return BadRequest();
         }
 
+        //[HttpPut("{status}")]
+        //public Status? ChangeStatus(string status)
+        //{
+        //    Status parsedStatus;
+        //    if(Enum.TryParse<Status>(status, true, out parsedStatus))
+        //    {
+        //        return parsedStatus;
+        //    }
+        //    return null;
+        //}
 
         [HttpPut("{userName}")]
         public IActionResult UpdateUser(string userName, [FromBody] User updateUser)
@@ -138,13 +162,14 @@ namespace HRProject.Controllers
                 return NotFound();
             }
 
+
             newUser.Name = updateUser.Name;
             newUser.SurName = updateUser.SurName;
             newUser.City = updateUser.City;
             newUser.Country = updateUser.Country;
             newUser.PartTime_FullTime = updateUser.PartTime_FullTime;
             newUser.WorkExperience = updateUser.WorkExperience;
-            newUser.Status = updateUser.Status;
+            newUser.StatusOfUser = updateUser.StatusOfUser;
             newUser.DateOfBirth = updateUser.DateOfBirth;
             newUser.Sex = updateUser.Sex;
             newUser.NoteField = updateUser.NoteField;
@@ -162,7 +187,7 @@ namespace HRProject.Controllers
             //}
 
             return new NoContentResult();
-        }
+            }
 
 
         [AllowAnonymous]
@@ -202,7 +227,7 @@ namespace HRProject.Controllers
             return new NoContentResult();
         }
         [HttpGet("datecreated/{dateFilter}")]
-        public IActionResult SortByDate(string dateFilter)
+        public IActionResult FilterByDate(string dateFilter)
         {
             var calendar = CultureInfo.InvariantCulture.Calendar;
 
@@ -256,7 +281,7 @@ namespace HRProject.Controllers
                     return Ok(_userRepository.GetUsers().Where(u =>
                     calendar.GetMonth(u.DateCreated.Date) >= 4
                     &&
-                    calendar.GetMonth(u.DateCreated.Date) <= 6 
+                    calendar.GetMonth(u.DateCreated.Date) <= 6
                     &&
                     u.DateCreated.Year == DateTime.Now.Year));
                 }
@@ -307,7 +332,7 @@ namespace HRProject.Controllers
                     calendar.GetMonth(u.DateCreated.Date) <= Decembar
                     &&
                     calendar.GetMonth(u.DateCreated.Date) >= October &&
-                    u.DateCreated.Year == DateTime.Now.Year-1));
+                    u.DateCreated.Year == DateTime.Now.Year - 1));
                 }
                 else if (currentQuarter >= 4 && currentQuarter <= 6)
                 {
@@ -357,7 +382,42 @@ namespace HRProject.Controllers
             {
                 return BadRequest();
             }
+        }
 
+        [HttpGet("dateCreated/customDate")]
+        public IActionResult FilterByDateRange([FromQuery] string startDate, [FromQuery] string endDate)
+        {
+
+            DateTime d1 = DateTime.ParseExact(startDate, "MM/dd/yyyy", null);
+            DateTime d2 = DateTime.ParseExact(endDate, "MM/dd/yyyy", null);
+            
+            if ((d2 - d1).TotalDays <= 366)
+            {
+                return Ok(_userRepository.GetUsers().Where(u =>
+                u.DateCreated >= d1 && u.DateCreated <= d2));
+            }
+
+            return BadRequest();
+
+        }
+
+        [HttpGet("searchByKeyword/{keyWord}")]
+        public IActionResult SearchUsersByKeyword(string keyWord)
+        {
+            if (keyWord != null)
+            {
+                var users = _ctx.Users.Where(u => u.UserName.Contains(keyWord)
+                || u.Name.Contains(keyWord) || u.SurName.Contains(keyWord)
+                || u.City.Contains(keyWord) || u.Country.Contains(keyWord)
+                || u.PartTime_FullTime.Contains(keyWord) || u.Sex.Contains(keyWord)
+                || u.PhoneNumber.Contains(keyWord));
+
+                return Ok(users);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }

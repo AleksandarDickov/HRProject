@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,7 +18,10 @@ namespace HRProject.Models
         public string Country { get; set; }
         public string PartTime_FullTime { get; set; }
         public string WorkExperience { get; set; }
-        public string Status { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public Status StatusOfUser { get; set; }
+
         public DateTime DateOfBirth { get; set; }
         public string Sex { get; set; }
         public string NoteField { get; set; }
@@ -31,5 +36,13 @@ namespace HRProject.Models
 
         //public ICollection<JobPosition> AppliedJobs { get; set; }
 
+    }
+
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum Status
+    {
+        available,
+        assigned,
+        frozen
     }
 }
