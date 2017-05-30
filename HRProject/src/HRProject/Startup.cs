@@ -34,7 +34,7 @@ namespace HRProject
             if (env.IsDevelopment())
             {
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets("145928039260-jjhlcd88o5vvr0jipsh0pq9i9hbp5m5u.apps.googleusercontent.com");
+                builder.AddUserSecrets("145928039260-6d5l2a5196jhmv1q6m45hg9e9eecu9ih.apps.googleusercontent.com");
                // builder.AddUserSecrets<Startup>();
             }
 
@@ -160,8 +160,8 @@ namespace HRProject
 
             app.UseGoogleAuthentication(new GoogleOptions()
             {
-                ClientId = "145928039260-jjhlcd88o5vvr0jipsh0pq9i9hbp5m5u.apps.googleusercontent.com",
-                ClientSecret = "6guYNWsdFyikG8eC9neS2kKR"
+                ClientId = "145928039260-6d5l2a5196jhmv1q6m45hg9e9eecu9ih.apps.googleusercontent.com",
+                ClientSecret = "NBJsviJXIB2giBTzzAwLp6Or"
             });
 
             createRolesandUsers(roleManager, userManager);
