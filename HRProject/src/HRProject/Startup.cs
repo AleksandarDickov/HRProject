@@ -146,6 +146,7 @@ namespace HRProject
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
             RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
         {
+            app.UseStaticFiles();
             loggerFactory.AddConsole();
             app.UseIdentity();
           
