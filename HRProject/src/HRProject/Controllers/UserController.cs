@@ -388,7 +388,7 @@ namespace HRProject.Controllers
         [HttpGet("dateCreated/customDate")]
         public IActionResult FilterByDateRange([FromQuery] string startDate, [FromQuery] string endDate)
         {
-
+            
             DateTime d1 = DateTime.ParseExact(startDate, "MM/dd/yyyy", null);
             DateTime d2 = DateTime.ParseExact(endDate, "MM/dd/yyyy", null);
             

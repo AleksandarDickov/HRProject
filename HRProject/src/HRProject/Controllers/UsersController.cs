@@ -23,8 +23,8 @@ namespace HRProject.Controllers
             _userRepository = userRepository;
         }
 
-        // GET: Users
-        public async Task<IActionResult> Index([FromQuery]string dateFilter, [FromQuery]string keyWord)
+        // GET: Users 
+        public async Task<IActionResult> Index([FromQuery]string dateFilter, [FromQuery]string keyWord, [FromQuery]DateTime startDate , [FromQuery]DateTime endDate)
         {
             var calendar = CultureInfo.InvariantCulture.Calendar;
 
@@ -185,6 +185,17 @@ namespace HRProject.Controllers
                 || u.PhoneNumber.Contains(keyWord));
 
                 return View(users);
+            }
+
+            //DateTime d1 = DateTime.ParseExact(startDate, "MM/dd/yyyy", null);
+            //DateTime d2 = DateTime.ParseExact(endDate, "MM/dd/yyyy", null);
+            var d1 = startDate;
+            var d2 = endDate;
+
+            if ((d2 - d1).TotalDays <= 366)
+            {
+                return View(_userRepository.GetUsers().Where(u =>
+                u.DateCreated >= d1 && u.DateCreated <= d2));
             }
 
             else
