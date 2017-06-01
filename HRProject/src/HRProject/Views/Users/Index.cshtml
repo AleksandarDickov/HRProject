@@ -9,7 +9,18 @@
     
 <form asp-controller="Users" asp-action="Index" method="get">
     <p>
-        Title: <input type="text" name="dateFilter">
+        <select name="dateFilter">
+            <option value="today">Today</option>
+            <option value="yesterday">Yesterday</option>
+            <option value="currentweek">Currentweek</option>
+            <option value="previousWeek">PreviousWeek</option>
+            <option value="currentmonth">Currentmonth</option>
+            <option value="previousmonth">Previousmonth</option>
+            <option value="currentquarter">Currentquarter</option>
+            <option value="previousquarter">Previousquarter</option>
+            <option value="currentyear">Currentyear</option>
+            <option value="previousyear">Previousyear</option>
+        </select>
         <input type="submit" value="Filter" />
     </p>
 </form>
