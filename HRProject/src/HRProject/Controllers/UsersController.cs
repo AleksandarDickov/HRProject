@@ -34,29 +34,29 @@ namespace HRProject.Controllers
             }
             else if (dateFilter == "yesterday")
             {
-                return Ok(_userRepository.GetUsers().Where(u => u.DateCreated.Date == DateTime.Today.AddDays(-1).Date));
+                return View(_userRepository.GetUsers().Where(u => u.DateCreated.Date == DateTime.Today.AddDays(-1).Date));
             }
             else if (dateFilter == "currentweek")
             {
-                return Ok(_userRepository.GetUsers().Where(u =>
+                return View(_userRepository.GetUsers().Where(u =>
                     calendar.GetWeekOfYear(u.DateCreated.Date, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday) ==
                     calendar.GetWeekOfYear(DateTime.Today.Date, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday)));
             }
             else if (dateFilter == "previousweek")
             {
-                return Ok(_userRepository.GetUsers().Where(u =>
+                return View(_userRepository.GetUsers().Where(u =>
                     calendar.GetWeekOfYear(u.DateCreated.Date, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday) ==
                     calendar.GetWeekOfYear(DateTime.Today.Date, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday) - 1));
             }
             else if (dateFilter == "currentmonth")
             {
-                return Ok(_userRepository.GetUsers().Where(u =>
+                return View(_userRepository.GetUsers().Where(u =>
                     calendar.GetMonth(u.DateCreated.Date) ==
                     calendar.GetMonth(DateTime.Today.Date)));
             }
             else if (dateFilter == "previousmonth")
             {
-                return Ok(_userRepository.GetUsers().Where(u =>
+                return View(_userRepository.GetUsers().Where(u =>
                     calendar.GetMonth(u.DateCreated.Date) ==
                     calendar.GetMonth(DateTime.Today.Date) - 1));
             }
@@ -66,7 +66,7 @@ namespace HRProject.Controllers
 
                 if (currentDate <= 3)
                 {
-                    return Ok(_userRepository.GetUsers().Where(u =>
+                    return View(_userRepository.GetUsers().Where(u =>
                     calendar.GetMonth(u.DateCreated.Date) >= 1
                     &&
                     calendar.GetMonth(u.DateCreated.Date) <= 3
@@ -75,7 +75,7 @@ namespace HRProject.Controllers
                 }
                 else if (currentDate >= 4 && currentDate <= 6)
                 {
-                    return Ok(_userRepository.GetUsers().Where(u =>
+                    return View(_userRepository.GetUsers().Where(u =>
                     calendar.GetMonth(u.DateCreated.Date) >= 4
                     &&
                     calendar.GetMonth(u.DateCreated.Date) <= 6
@@ -84,7 +84,7 @@ namespace HRProject.Controllers
                 }
                 else if (currentDate >= 7 && currentDate <= 9)
                 {
-                    return Ok(_userRepository.GetUsers().Where(u =>
+                    return View(_userRepository.GetUsers().Where(u =>
                     calendar.GetMonth(u.DateCreated.Date) >= 7
                     &&
                     calendar.GetMonth(u.DateCreated.Date) <= 9
@@ -94,7 +94,7 @@ namespace HRProject.Controllers
                 }
                 else if (currentDate >= 10 && currentDate <= 12)
                 {
-                    return Ok(_userRepository.GetUsers().Where(u =>
+                    return View(_userRepository.GetUsers().Where(u =>
                     calendar.GetMonth(u.DateCreated.Date) >= 10
                     &&
                     calendar.GetMonth(u.DateCreated.Date) <= 12
@@ -126,7 +126,7 @@ namespace HRProject.Controllers
 
                 if (currentQuarter <= 3)
                 {
-                    return Ok(_userRepository.GetUsers().Where(u =>
+                    return View(_userRepository.GetUsers().Where(u =>
                     calendar.GetMonth(u.DateCreated.Date) <= Decembar
                     &&
                     calendar.GetMonth(u.DateCreated.Date) >= October &&
@@ -134,7 +134,7 @@ namespace HRProject.Controllers
                 }
                 else if (currentQuarter >= 4 && currentQuarter <= 6)
                 {
-                    return Ok(_userRepository.GetUsers().Where(u =>
+                    return View(_userRepository.GetUsers().Where(u =>
                     calendar.GetMonth(u.DateCreated.Date) >= January
                     &&
                     calendar.GetMonth(u.DateCreated.Date) <= Mart
@@ -143,7 +143,7 @@ namespace HRProject.Controllers
                 }
                 else if (currentQuarter >= 7 && currentQuarter <= 9)
                 {
-                    return Ok(_userRepository.GetUsers().Where(u =>
+                    return View(_userRepository.GetUsers().Where(u =>
                     calendar.GetMonth(u.DateCreated.Date) >= April
                     &&
                     calendar.GetMonth(u.DateCreated.Date) <= Jun
@@ -152,7 +152,7 @@ namespace HRProject.Controllers
                 }
                 else if (currentQuarter >= 10 && currentQuarter <= 12)
                 {
-                    return Ok(_userRepository.GetUsers().Where(u =>
+                    return View(_userRepository.GetUsers().Where(u =>
                     calendar.GetMonth(u.DateCreated.Date) >= Jul
                     &&
                     calendar.GetMonth(u.DateCreated.Date) <= Semptembar
@@ -171,7 +171,7 @@ namespace HRProject.Controllers
             }
             else if (dateFilter == "previousyear")
             {
-                return Ok(_userRepository.GetUsers().Where(u =>
+                return View(_userRepository.GetUsers().Where(u =>
                 calendar.GetYear(u.DateCreated.Date) ==
                 calendar.GetYear(DateTime.Today.Date) - 1));
             }
