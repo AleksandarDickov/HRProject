@@ -24,7 +24,7 @@ namespace HRProject.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> Index([FromQuery]string dateFilter)
+        public async Task<IActionResult> Index([FromQuery]string dateFilter, [FromQuery]string keyWord)
         {
             var calendar = CultureInfo.InvariantCulture.Calendar;
 
@@ -174,6 +174,17 @@ namespace HRProject.Controllers
                 return View(_userRepository.GetUsers().Where(u =>
                 calendar.GetYear(u.DateCreated.Date) ==
                 calendar.GetYear(DateTime.Today.Date) - 1));
+            }
+
+            if (keyWord != null)
+            {
+                var users = _context.Users.Where(u => u.UserName.Contains(keyWord)
+                || u.Name.Contains(keyWord) || u.SurName.Contains(keyWord)
+                || u.City.Contains(keyWord) || u.Country.Contains(keyWord)
+                || u.PartTime_FullTime.Contains(keyWord) || u.Sex.Contains(keyWord)
+                || u.PhoneNumber.Contains(keyWord));
+
+                return View(users);
             }
 
             else

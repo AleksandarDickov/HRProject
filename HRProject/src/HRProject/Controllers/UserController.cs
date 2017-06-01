@@ -382,6 +382,7 @@ namespace HRProject.Controllers
             {
                 return BadRequest();
             }
+
         }
 
         [HttpGet("dateCreated/customDate")]
@@ -401,8 +402,8 @@ namespace HRProject.Controllers
 
         }
 
-        [HttpGet("searchByKeyword/{keyWord}")]
-        public IActionResult SearchUsersByKeyword(string keyWord)
+       
+        public IActionResult SearchUsersByKeyword([FromQuery]string keyWord)
         {
             if (keyWord != null)
             {
