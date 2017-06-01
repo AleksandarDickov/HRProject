@@ -6,6 +6,13 @@
 }
 
 <h2>Index</h2>
+    
+<form asp-controller="Users" asp-action="Index" method="get">
+    <p>
+        Title: <input type="text" name="dateFilter">
+        <input type="submit" value="Filter" />
+    </p>
+</form>
 
 <p>
     <a asp-action="Create">Create New</a>

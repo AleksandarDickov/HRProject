@@ -226,8 +226,8 @@ namespace HRProject.Controllers
             _userRepository.Remove(name);
             return new NoContentResult();
         }
-        [HttpGet("datecreated/{dateFilter}")]
-        public IActionResult FilterByDate(string dateFilter)
+        [HttpGet("datecreated")]
+        public IActionResult FilterByDate([FromQuery]string dateFilter)
         {
             var calendar = CultureInfo.InvariantCulture.Calendar;
 

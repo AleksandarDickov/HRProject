@@ -7,24 +7,183 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HRProject;
 using HRProject.Models;
+using System.Globalization;
+using HRProject.Services;
 
 namespace HRProject.Controllers
 {
     public class UsersController : Controller
     {
         private readonly HRContext _context;
+        private IUserRepository _userRepository;
 
-        public UsersController(HRContext context)
+        public UsersController(HRContext context, IUserRepository userRepository)
         {
-            _context = context;    
+            _context = context;
+            _userRepository = userRepository;
         }
 
         // GET: Users
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery]string dateFilter)
         {
+            var calendar = CultureInfo.InvariantCulture.Calendar;
 
-            return View(await _context.RegUsers.ToListAsync());
+            if (dateFilter == "today")
+            {
+                return View(_userRepository.GetUsers().Where(u => u.DateCreated.Date == DateTime.Today.Date).ToList());
+            }
+            else if (dateFilter == "yesterday")
+            {
+                return Ok(_userRepository.GetUsers().Where(u => u.DateCreated.Date == DateTime.Today.AddDays(-1).Date));
+            }
+            else if (dateFilter == "currentweek")
+            {
+                return Ok(_userRepository.GetUsers().Where(u =>
+                    calendar.GetWeekOfYear(u.DateCreated.Date, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday) ==
+                    calendar.GetWeekOfYear(DateTime.Today.Date, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday)));
+            }
+            else if (dateFilter == "previousweek")
+            {
+                return Ok(_userRepository.GetUsers().Where(u =>
+                    calendar.GetWeekOfYear(u.DateCreated.Date, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday) ==
+                    calendar.GetWeekOfYear(DateTime.Today.Date, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday) - 1));
+            }
+            else if (dateFilter == "currentmonth")
+            {
+                return Ok(_userRepository.GetUsers().Where(u =>
+                    calendar.GetMonth(u.DateCreated.Date) ==
+                    calendar.GetMonth(DateTime.Today.Date)));
+            }
+            else if (dateFilter == "previousmonth")
+            {
+                return Ok(_userRepository.GetUsers().Where(u =>
+                    calendar.GetMonth(u.DateCreated.Date) ==
+                    calendar.GetMonth(DateTime.Today.Date) - 1));
+            }
+            else if (dateFilter == "currentquarter")
+            {
+                var currentDate = calendar.GetMonth(DateTime.Today.Date);
+
+                if (currentDate <= 3)
+                {
+                    return Ok(_userRepository.GetUsers().Where(u =>
+                    calendar.GetMonth(u.DateCreated.Date) >= 1
+                    &&
+                    calendar.GetMonth(u.DateCreated.Date) <= 3
+                    &&
+                    u.DateCreated.Year == DateTime.Now.Year));
+                }
+                else if (currentDate >= 4 && currentDate <= 6)
+                {
+                    return Ok(_userRepository.GetUsers().Where(u =>
+                    calendar.GetMonth(u.DateCreated.Date) >= 4
+                    &&
+                    calendar.GetMonth(u.DateCreated.Date) <= 6
+                    &&
+                    u.DateCreated.Year == DateTime.Now.Year));
+                }
+                else if (currentDate >= 7 && currentDate <= 9)
+                {
+                    return Ok(_userRepository.GetUsers().Where(u =>
+                    calendar.GetMonth(u.DateCreated.Date) >= 7
+                    &&
+                    calendar.GetMonth(u.DateCreated.Date) <= 9
+                    &&
+                    u.DateCreated.Year == DateTime.Now.Year));
+
+                }
+                else if (currentDate >= 10 && currentDate <= 12)
+                {
+                    return Ok(_userRepository.GetUsers().Where(u =>
+                    calendar.GetMonth(u.DateCreated.Date) >= 10
+                    &&
+                    calendar.GetMonth(u.DateCreated.Date) <= 12
+                    &&
+                    u.DateCreated.Year == DateTime.Now.Year));
+                }
+
+                return BadRequest();
+                
+
+            }
+            else if (dateFilter == "previousquarter")
+            {
+
+                var currentQuarter = calendar.GetMonth(DateTime.Today.Date);
+
+                var January = calendar.GetMonthsInYear(DateTime.Today.Year) - 11;
+                var February = calendar.GetMonthsInYear(DateTime.Today.Year) - 10;
+                var Mart = calendar.GetMonthsInYear(DateTime.Today.Year) - 9;
+                var April = calendar.GetMonthsInYear(DateTime.Today.Year) - 8;
+                var May = calendar.GetMonthsInYear(DateTime.Today.Year) - 7;
+                var Jun = calendar.GetMonthsInYear(DateTime.Today.Year) - -6;
+                var Jul = calendar.GetMonthsInYear(DateTime.Today.Year) - 5;
+                var August = calendar.GetMonthsInYear(DateTime.Today.Year) - 4;
+                var Semptembar = calendar.GetMonthsInYear(DateTime.Today.Year) - 3;
+                var October = calendar.GetMonthsInYear(DateTime.Today.Year) - 2;
+                var Novembar = calendar.GetMonthsInYear(DateTime.Today.Year) - 1;
+                var Decembar = calendar.GetMonthsInYear(DateTime.Today.Year) - 0;
+
+                if (currentQuarter <= 3)
+                {
+                    return Ok(_userRepository.GetUsers().Where(u =>
+                    calendar.GetMonth(u.DateCreated.Date) <= Decembar
+                    &&
+                    calendar.GetMonth(u.DateCreated.Date) >= October &&
+                    u.DateCreated.Year == DateTime.Now.Year - 1));
+                }
+                else if (currentQuarter >= 4 && currentQuarter <= 6)
+                {
+                    return Ok(_userRepository.GetUsers().Where(u =>
+                    calendar.GetMonth(u.DateCreated.Date) >= January
+                    &&
+                    calendar.GetMonth(u.DateCreated.Date) <= Mart
+                    &&
+                    u.DateCreated.Year == DateTime.Now.Year));
+                }
+                else if (currentQuarter >= 7 && currentQuarter <= 9)
+                {
+                    return Ok(_userRepository.GetUsers().Where(u =>
+                    calendar.GetMonth(u.DateCreated.Date) >= April
+                    &&
+                    calendar.GetMonth(u.DateCreated.Date) <= Jun
+                    &&
+                    u.DateCreated.Year == DateTime.Now.Year));
+                }
+                else if (currentQuarter >= 10 && currentQuarter <= 12)
+                {
+                    return Ok(_userRepository.GetUsers().Where(u =>
+                    calendar.GetMonth(u.DateCreated.Date) >= Jul
+                    &&
+                    calendar.GetMonth(u.DateCreated.Date) <= Semptembar
+                    &&
+                    u.DateCreated.Year == DateTime.Now.Year));
+                }
+
+                return BadRequest();
+
+            }
+            else if (dateFilter == "currentyear")
+            {
+                return View(_userRepository.GetUsers().Where(u =>
+                calendar.GetYear(u.DateCreated.Date) ==
+                calendar.GetYear(DateTime.Today.Date)));
+            }
+            else if (dateFilter == "previousyear")
+            {
+                return Ok(_userRepository.GetUsers().Where(u =>
+                calendar.GetYear(u.DateCreated.Date) ==
+                calendar.GetYear(DateTime.Today.Date) - 1));
+            }
+
+            else
+            {
+                return View(await _context.RegUsers.ToListAsync());
+            }
         }
+
+
+   
 
         // GET: Users/Details/5
         public async Task<IActionResult> Details(string id)
