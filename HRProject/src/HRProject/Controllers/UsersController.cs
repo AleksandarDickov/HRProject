@@ -241,7 +241,9 @@ namespace HRProject.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(user);
+                user.DateCreated = DateTime.Now;
                 await _context.SaveChangesAsync();
+                
                 return RedirectToAction("Index");
             }
             return View(user);
