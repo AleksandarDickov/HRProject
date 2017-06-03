@@ -138,7 +138,7 @@ namespace Logon.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation(4, "User logged out.");
-            return RedirectToAction("GetJob", "Job");
+            return RedirectToAction("Login", "Account");
         }
 
         //

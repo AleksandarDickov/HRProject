@@ -119,7 +119,7 @@ namespace HRProject
                 config.Password.RequireUppercase = false;
                 config.Password.RequireLowercase = false;
 
-                config.Cookies.ApplicationCookie.LoginPath = "/";
+                config.Cookies.ApplicationCookie.LoginPath = "/Account/Login";
                 config.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents()
                 {
                     OnRedirectToLogin = async ctx =>
