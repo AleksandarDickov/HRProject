@@ -35,7 +35,7 @@ namespace HRProject
             {
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
                 builder.AddUserSecrets("145928039260-6d5l2a5196jhmv1q6m45hg9e9eecu9ih.apps.googleusercontent.com");
-               // builder.AddUserSecrets<Startup>();
+                // builder.AddUserSecrets<Startup>();
             }
 
             builder.AddEnvironmentVariables();
@@ -45,7 +45,8 @@ namespace HRProject
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().AddJsonOptions(options => {
+            services.AddMvc().AddJsonOptions(options =>
+            {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             }); ;
 
@@ -86,7 +87,7 @@ namespace HRProject
             });
 
             // Add framework services.
-         //   services.AddApplicationInsightsTelemetry(Configuration);
+            //   services.AddApplicationInsightsTelemetry(Configuration);
 
 
             //services.AddIdentity<User, IdentityRole>(config =>
@@ -98,7 +99,7 @@ namespace HRProject
             //.AddEntityFrameworkStores<DbContext>();
 
             //services.AddLogging();
-            
+
 
             var connectionString = @"Server=(localdb)\mssqllocaldb;Database=HRContext;Trusted_Connection=True;";
             services.AddDbContext<HRContext>(o => o.UseSqlServer(connectionString));
@@ -149,7 +150,7 @@ namespace HRProject
             app.UseStaticFiles();
             loggerFactory.AddConsole();
             app.UseIdentity();
-          
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -158,6 +159,14 @@ namespace HRProject
             {
                 app.UseExceptionHandler();
             }
+
+
+            app.UseFacebookAuthentication(new FacebookOptions()
+            { 
+                AppId = "309672016121836",
+                AppSecret = "62bc452e104fcebbf03c22f0a2135e79"
+            });
+
 
             app.UseGoogleAuthentication(new GoogleOptions()
             {
@@ -171,10 +180,10 @@ namespace HRProject
 
             app.UseMvc(config =>
             {
-                 config.MapRoute(
-                    name: "Default",
-                    template: "{controller}/{action}/{id?}",
-                    defaults: new { controller = "Account", action = "Login" });
+                config.MapRoute(
+                   name: "Default",
+                   template: "{controller}/{action}/{id?}",
+                   defaults: new { controller = "Account", action = "Login" });
             });
         }
         public async void createRolesandUsers(RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
