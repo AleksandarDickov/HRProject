@@ -48,6 +48,23 @@
         <input type="submit" value="Search" />
     </form>
     <br />
+
+<form asp-controller="Users" asp-action="Index" method="get">
+
+    Select by UserType:
+    <p></p>
+    <select  name="userType">
+        <option value="RegularUser">RegularUser</option>
+        <option value="HrManager">HrManager</option>
+        <option value="SuperUser">SuperUser</option>
+    </select>
+    <input type="submit" value="Filter" />
+</form>  
+<br />  
+
+
+
+
     
     <a href="https://localhost:44302/users/index">Reset</a>
     <br />
