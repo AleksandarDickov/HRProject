@@ -28,7 +28,7 @@ namespace HRProject.Controllers
         }
 
         // GET: Users 
-        public async Task<IActionResult> Index([FromQuery]string dateFilter, [FromQuery]string keyWord, [FromQuery]DateTime startDate , [FromQuery]DateTime endDate, [FromQuery]string userType)
+        public async Task<IActionResult> Index([FromQuery]string dateFilter, [FromQuery]string keyWord, [FromQuery]DateTime startDate , [FromQuery]DateTime endDate, [FromQuery]string userType, [FromQuery] int statusOfUser)
         {
             var calendar = CultureInfo.InvariantCulture.Calendar;
 
@@ -214,8 +214,23 @@ namespace HRProject.Controllers
             }
             if (userType == "SuperUser")
             {
-                return View(_context.Users.ToList().Where(u => IsInRole(u, "SuperUser")));
+                return View(_context.Users.ToList().Where(u => IsInRole(u, "S`uperUser")));
             }
+
+            if (statusOfUser == 0)
+            {
+                return View(_context.Users.Where(u => u.StatusOfUser == Status.available));
+            }
+            if (statusOfUser == 1)
+            {
+                return View(_context.Users.Where(u => u.StatusOfUser == Status.assigned));
+            }
+
+            if (statusOfUser == 2)
+            {
+                return View(_context.Users.Where(u => u.StatusOfUser == Status.frozen));
+            }
+
 
             else
             {
