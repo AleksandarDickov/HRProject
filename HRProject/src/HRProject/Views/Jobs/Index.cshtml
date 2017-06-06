@@ -7,6 +7,17 @@
 
 <h2>Index</h2>
 
+<br />
+
+<form asp-controller="Jobs" asp-action="Index" method="get">
+
+    Select by keyword:
+    <p></p>
+    <input type="text" name="keyWord">
+    <input type="submit" value="Search" />
+</form>
+<br />
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>

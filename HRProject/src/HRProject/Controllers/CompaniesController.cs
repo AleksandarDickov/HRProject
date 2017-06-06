@@ -20,9 +20,22 @@ namespace HRProject.Controllers
         }
 
         // GET: Companies
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery]string keyWord)
         {
-            return View(await _context.Companys.ToListAsync());
+            
+
+            if (keyWord != null)
+            {
+                var companies = _context.Companys.Where(m => m.Name.Contains(keyWord) || m.Description.Contains(keyWord)
+                || m.City.Contains(keyWord) || m.Website.Contains(keyWord)
+                || m.Country.Contains(keyWord) || m.EmailAddress.Contains(keyWord));
+
+                return View(companies);
+            }
+            else
+            {
+                return View(await _context.Companys.ToListAsync());
+            }
         }
 
         // GET: Companies/Details/5

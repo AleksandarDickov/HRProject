@@ -20,10 +20,23 @@ namespace HRProject.Controllers
         }
 
         // GET: Jobs
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery]string keyWord)
         {
             var hRContext = _context.JobPositions.Include(j => j.CreatedBy);
-            return View(await hRContext.ToListAsync());
+            
+
+            if (keyWord != null)
+            {
+                var jobs = _context.JobPositions.Where(j => j.Name.Contains(keyWord) || j.City.Contains(keyWord)
+                || j.Country.Contains(keyWord)
+                || j.PartTime_FullTime.Contains(keyWord));
+
+                return View(jobs);
+            }
+            else
+            {
+                return View(await hRContext.ToListAsync());
+            }
         }
 
         // GET: Jobs/Details/5
