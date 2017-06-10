@@ -9,6 +9,8 @@ using HRProject;
 using HRProject.Models;
 using System.Globalization;
 using HRProject.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace HRProject.Controllers
 {
@@ -16,16 +18,20 @@ namespace HRProject.Controllers
     {
         private readonly HRContext _context;
         private IUserRepository _userRepository;
+        private UserManager<User> _userManager;
 
-        public UsersController(HRContext context, IUserRepository userRepository)
+        public UsersController(HRContext context, IUserRepository userRepository, UserManager<User> userManager)
         {
             _context = context;
             _userRepository = userRepository;
+            _userManager = userManager;
         }
 
         // GET: Users 
-        public async Task<IActionResult> Index([FromQuery]string dateFilter, [FromQuery]string keyWord, [FromQuery]DateTime startDate , [FromQuery]DateTime endDate)
-        {
+        public async Task<IActionResult> Index([FromQuery]string dateFilter, [FromQuery]string keyWord, [FromQuery]DateTime startDate , [FromQuery]DateTime endDate, [FromQuery]string userType, [FromQuery] int statusOfUser)
+        {   
+
+            // sort by date
             var calendar = CultureInfo.InvariantCulture.Calendar;
 
             if (dateFilter == "today")
@@ -189,13 +195,46 @@ namespace HRProject.Controllers
 
             //DateTime d1 = DateTime.ParseExact(startDate, "MM/dd/yyyy", null);
             //DateTime d2 = DateTime.ParseExact(endDate, "MM/dd/yyyy", null);
+
+            //custom date range
             var d1 = startDate;
             var d2 = endDate;
 
-            if ((d2 - d1).TotalDays <= 366)
+            if (startDate.Year > 1 && (d2 - d1).TotalDays <= 366)
             {
                 return View(_userRepository.GetUsers().Where(u =>
                 u.DateCreated >= d1 && u.DateCreated <= d2));
+            }
+
+            //user type
+            if (userType == "HrManager")
+            {
+                var res = _context.Users.ToList().Where(u => IsInRole(u, "HrManager"));
+                return View(res);
+            }
+            if (userType == "RegularUser")
+            {
+                
+                return View(_context.Users.ToList().Where(u=> IsInRole(u, "RegularUser")));
+            }
+            if (userType == "SuperUser")
+            {
+                return View(_context.Users.ToList().Where(u => IsInRole(u, "SuperUser")));
+            }
+            
+            // status of user
+            if (statusOfUser == 0)
+            {
+                return View(_context.Users.Where(u => u.StatusOfUser == Status.available));
+            }
+            if (statusOfUser == 1)
+            {
+                return View(_context.Users.Where(u => u.StatusOfUser == Status.assigned));
+            }
+
+            if (statusOfUser == 2)
+            {
+                return View(_context.Users.Where(u => u.StatusOfUser == Status.frozen));
             }
 
             else
@@ -204,8 +243,19 @@ namespace HRProject.Controllers
             }
         }
 
+        public bool IsInRole(User user, string role)
+        {
+            var result = _userManager.IsInRoleAsync(user, role).Result;
+            return result;
+        }
 
-   
+        private string GetRoleName(string roleId)
+        {
+            return _context.Roles.FirstOrDefault(r => r.Id == roleId).Name;
+        }
+
+
+
 
         // GET: Users/Details/5
         public async Task<IActionResult> Details(string id)
