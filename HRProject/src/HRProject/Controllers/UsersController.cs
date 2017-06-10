@@ -29,7 +29,9 @@ namespace HRProject.Controllers
 
         // GET: Users 
         public async Task<IActionResult> Index([FromQuery]string dateFilter, [FromQuery]string keyWord, [FromQuery]DateTime startDate , [FromQuery]DateTime endDate, [FromQuery]string userType, [FromQuery] int statusOfUser)
-        {
+        {   
+
+            // sort by date
             var calendar = CultureInfo.InvariantCulture.Calendar;
 
             if (dateFilter == "today")
@@ -193,6 +195,8 @@ namespace HRProject.Controllers
 
             //DateTime d1 = DateTime.ParseExact(startDate, "MM/dd/yyyy", null);
             //DateTime d2 = DateTime.ParseExact(endDate, "MM/dd/yyyy", null);
+
+            //custom date range
             var d1 = startDate;
             var d2 = endDate;
 
@@ -202,6 +206,7 @@ namespace HRProject.Controllers
                 u.DateCreated >= d1 && u.DateCreated <= d2));
             }
 
+            //user type
             if (userType == "HrManager")
             {
                 var res = _context.Users.ToList().Where(u => IsInRole(u, "HrManager"));
@@ -214,9 +219,10 @@ namespace HRProject.Controllers
             }
             if (userType == "SuperUser")
             {
-                return View(_context.Users.ToList().Where(u => IsInRole(u, "S`uperUser")));
+                return View(_context.Users.ToList().Where(u => IsInRole(u, "SuperUser")));
             }
-
+            
+            // status of user
             if (statusOfUser == 0)
             {
                 return View(_context.Users.Where(u => u.StatusOfUser == Status.available));
@@ -230,7 +236,6 @@ namespace HRProject.Controllers
             {
                 return View(_context.Users.Where(u => u.StatusOfUser == Status.frozen));
             }
-
 
             else
             {
