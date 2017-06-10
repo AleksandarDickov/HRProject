@@ -214,8 +214,7 @@ namespace HRProject.Controllers
             }
             if (userType == "RegularUser")
             {
-                
-                return View(_context.Users.ToList().Where(u=> IsInRole(u, "RegularUser")));
+                return View(_context.RegUsers.ToList().Where(u=> IsInRole(u, "RegularUser")));
             }
             if (userType == "SuperUser")
             {

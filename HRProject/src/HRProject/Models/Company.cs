@@ -20,6 +20,6 @@ namespace HRProject.Models
         public string EmailAddress { get; set; }
         public string Website { get; set; }
 
-         public ICollection<JobPosition> Jobs { get; set; }
+        public ICollection<JobPosition> Jobs { get; set; }
     }
 }
