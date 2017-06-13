@@ -25,6 +25,8 @@ namespace HRProject.Controllers
         {
             var jobEntity = _jobRepository.GetJobs();
 
+
+
             return Ok(jobEntity);
         }
 
